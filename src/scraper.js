@@ -16,6 +16,7 @@ const TIMETABLE_URL =
   process.env.QUMS_TIMETABLE_URL ||
   'https://qums.quantumuniversity.edu.in/Web_StudentAcademic/Cyborg_StudentTimeTable?id=Time%20Table';
 const ATTENDANCE_API = '/Web_StudentAcademic/GetYearSemWiseAttendance';
+const LIVE_ATTENDANCE_API = '/Web_StudentAcademic/GetSubjectDetailStudentAcademicFromLive';
 // QUMS student-detail API (live-probed): POST { RegID } ->
 // { state: "[{ RegID, StudentID, EnrollmentNo, StudentName, ... }]" }
 const STUDENT_DETAIL_API = '/Web_StudentAcademic/GetStudentDetailOnRegID';
@@ -187,12 +188,23 @@ async function getStudentContext(apiContext, opts = {}) {
   }
   if (sessionPath) setCachedRegId(sessionPath, regId);
 
+  const candidateSem = String(opts.yearSem || opts.hintYearSem || '').trim();
+  let studentName = opts.studentName || '';
   const detectedYearSems = [];
   let yearSem = null;
   let attendancePayload = null;
 
+  if (opts.skipAttendanceProbe) {
+    return {
+      regId,
+      yearSem: candidateSem || null,
+      availableYearSems: [],
+      studentName,
+      attendancePayload: null,
+    };
+  }
+
   // FAST PATH 1: If known/hinted yearSem is passed (e.g. from user profile or opts), check it FIRST!
-  const candidateSem = String(opts.yearSem || opts.hintYearSem || '').trim();
   if (/^[1-8]$/.test(candidateSem)) {
     try {
       const attendanceResp = await apiPost(apiContext, ATTENDANCE_API, {
@@ -288,7 +300,6 @@ async function getStudentContext(apiContext, opts = {}) {
       : '')
   );
 
-  let studentName = opts.studentName || '';
   if (!studentName) {
     try {
       let detailResp = await apiPost(apiContext, STUDENT_DETAIL_API, {
@@ -398,6 +409,48 @@ async function scrapeAttendance(opts = {}) {
   assertSessionFile(sessionPath);
   const apiContext = await newApiContext(sessionPath);
   try {
+    const directContext = await getStudentContext(apiContext, {
+      sessionPath,
+      yearSem: opts.yearSem,
+      studentName: opts.studentName,
+      skipAttendanceProbe: true,
+    });
+    const directResp = await apiPost(apiContext, LIVE_ATTENDANCE_API, {
+      form: { RegID: directContext.regId },
+      timeout: 60000,
+    });
+
+    if (directResp.ok()) {
+      try {
+        const directPayload = await directResp.json();
+        const rawRows = JSON.parse(directPayload.state || '[]');
+        const rows = Array.isArray(rawRows)
+          ? rawRows.map(mapAttendanceRow).filter((r) => r.subject)
+          : [];
+        if (rows.length) {
+          let summary = null;
+          const summaryRows = JSON.parse(directPayload.data || '[]');
+          const st = Array.isArray(summaryRows) ? summaryRows[0] : null;
+          if (st) {
+            const rawTot = st.TotalPercentage != null && String(st.TotalPercentage).trim() !== ''
+              ? String(st.TotalPercentage).trim()
+              : null;
+            const numTot = rawTot != null && !isNaN(Number(rawTot)) ? Number(rawTot) : null;
+            summary = {
+              dateFrom: norm(st.DateFrom),
+              dateTo: norm(st.DateTo),
+              overallPercentage: numTot,
+              overallPercentageRaw: rawTot || undefined,
+            };
+          }
+          console.log(`[QUMS] Direct attendance page data loaded: ${rows.length} subject(s), RegID=${directContext.regId}`);
+          return rows.map((r) => ({ ...r, periodSummary: summary }));
+        }
+      } catch (err) {
+        console.warn(`[QUMS] Direct attendance response could not be parsed: ${err.message}`);
+      }
+    }
+
     const { regId, yearSem, availableYearSems, attendancePayload } = await getStudentContext(apiContext, {
       sessionPath,
       yearSem: opts.yearSem,
