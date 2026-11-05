@@ -160,6 +160,7 @@ available on demand through the dashboard/Telegram flow.
 - `/telegram-guide` — Telegram setup guide
 - `/qums-troubleshooting` — QUMS troubleshooting
 - `/health` — deployment health check
+- `POST /api/cron/morning` — AntiDeploy scheduled-job wake-up for the 8:30 AM IST timetable
 
 ### Authenticated
 
@@ -188,6 +189,19 @@ npm run scrape  # Run the scraper entry point
 npm run cron    # Run the scheduler entry point
 npm run telegram-test
 ```
+
+### AntiDeploy scheduled jobs
+
+AntiDeploy scales sleeping apps to zero, so the in-process `node-cron` timers
+cannot wake the app. Add this scheduled job in the AntiDeploy dashboard:
+
+- **Path:** `/api/cron/morning`
+- **Method:** `POST`
+- **Cron:** `0 3 * * *` (03:00 UTC = 08:30 IST)
+
+AntiDeploy sends the required `x-antideploy-cron: 1` header automatically. The
+route is safe to retry: it only sends the morning timetable inside the
+08:30–11:00 IST catch-up window and deduplicates successful sends per user/day.
 
 ## Testing
 

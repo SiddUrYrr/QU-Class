@@ -930,6 +930,22 @@ app.get('/health', (req, res) => {
   res.json({ ok: true, status: 'ok', uptimeSeconds: Math.round(process.uptime()), timestamp: new Date().toISOString() });
 });
 
+// AntiDeploy wakes sleeping apps by calling a route instead of keeping an
+// in-process cron alive. The scheduler's catch-up window and daily dedupe
+// make retries safe.
+app.post('/api/cron/morning', async (req, res) => {
+  if (req.get('x-antideploy-cron') !== '1') {
+    return res.status(403).json({ error: 'Scheduled-job requests only.' });
+  }
+  try {
+    const result = await catchUpMorningSchedule(console);
+    return res.json({ ok: true, job: 'morning-schedule', ...result });
+  } catch (err) {
+    console.error('[cron] morning schedule failed:', err.message);
+    return res.status(500).json({ ok: false, error: 'Morning schedule failed.' });
+  }
+});
+
 app.use(express.static(PUBLIC_DIR, {
   maxAge: IS_PROD ? '1d' : 0,
   etag: true,
