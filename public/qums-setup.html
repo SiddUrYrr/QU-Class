@@ -139,7 +139,7 @@
 
     async function startLogin(confirmSwitch = false) {
       $('error').classList.add('hidden'); $('msg').classList.add('hidden');
-      $('msg').textContent = 'Headless browser me login page khul raha hai…'; $('msg').classList.remove('hidden');
+      $('msg').textContent = 'Headless browser login page opening…'; $('msg').classList.remove('hidden');
       try {
         const body = {
           qid: $('qid').value.trim() || savedQid,
