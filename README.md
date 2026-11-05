@@ -266,4 +266,4 @@ test/
 ClassQU is an independent utility and is not an official Quantum University
 service.
 
-** Inspire by https://github.com/karansin003/qattend **
+**Inspire by https://github.com/karansin003/qattend**
