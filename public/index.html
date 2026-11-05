@@ -117,13 +117,6 @@
       <div class="chips" id="chips"></div>
       <div id="errorBox" class="form-error hidden" role="alert" aria-live="polite"></div>
 
-      <div class="row" style="justify-content: flex-end; align-items: center; gap: 8px; margin: 12px 0 8px;">
-        <label for="guidanceLanguage" class="form-hint" style="margin: 0;">Guidance:</label>
-        <select id="guidanceLanguage" aria-label="Guidance language" style="width: auto; padding: 5px 8px; font-size: .82rem;">
-          <option value="hinglish">Hinglish</option>
-          <option value="english">English</option>
-        </select>
-      </div>
       <div class="table-wrap">
         <table id="table" hidden>
           <thead>
@@ -173,23 +166,9 @@
     const $ = (id) => document.getElementById(id);
     const statusEl = $('status'), chipsEl = $('chips'), tableEl = $('table'), tbodyEl = $('tbody');
     const errorBox = $('errorBox'), refreshBtn = $('refreshBtn');
-    const guidanceLanguageEl = $('guidanceLanguage');
     let latestAttendance = null;
-    guidanceLanguageEl.value = localStorage.getItem('classqu-guidance-language') || 'english';
 
     function guidanceText(subject) {
-      if (guidanceLanguageEl.value !== 'hinglish') {
-        if (subject.status === 'below-75') {
-          const count = subject.classesNeeded || 1;
-          return `Attend the next ${count} ${count === 1 ? 'class' : 'classes'} to reach 75%.`;
-        }
-        if (subject.status === 'ok') {
-          const count = subject.canSkip || 0;
-          return `You can miss ${count} ${count === 1 ? 'class' : 'classes'} and remain at 75%+.`;
-        }
-        return 'Attendance data could not be read — please check the portal data.';
-      }
-      return subject.guidance || '';
       if (subject.status === 'below-75') {
         const count = subject.classesNeeded || 1;
         return `Attend the next ${count} ${count === 1 ? 'class' : 'classes'} to reach 75%.`;
@@ -198,7 +177,7 @@
         const count = subject.canSkip || 0;
         return `You can miss ${count} ${count === 1 ? 'class' : 'classes'} and remain at 75%+.`;
       }
-      return 'Attendance data could not be read — please check again.';
+      return 'Attendance data could not be read — please check the portal data.';
     }
 
     function chip(label, value) {
@@ -270,11 +249,6 @@
       });
       tableEl.hidden = false;
     }
-
-    guidanceLanguageEl.addEventListener('change', () => {
-      localStorage.setItem('classqu-guidance-language', guidanceLanguageEl.value);
-      if (latestAttendance) render(latestAttendance);
-    });
 
     async function loadAttendance(forceFresh = false) {
       refreshBtn.disabled = true;
