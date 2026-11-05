@@ -485,19 +485,10 @@
     refreshBtn.addEventListener('click', () => loadAttendance(true));
     $('todayLoadBtn').addEventListener('click', (e) => loadToday(e.currentTarget));
 
-    // Instant First Paint from localStorage cache if present (0ms display!)
-    try {
-      const cached = localStorage.getItem('qattend_attendance_cache');
-      if (cached) {
-        const parsed = JSON.parse(cached);
-        if (parsed && Array.isArray(parsed.subjects) && parsed.subjects.length > 0) {
-          render(parsed);
-        }
-      }
-    } catch {}
-
     loadMe();
-    loadAttendance(false);
+    // Always load the current QUMS values on page open; cached values can be
+    // outdated after attendance is marked in the portal.
+    loadAttendance(true);
     loadTelegramStatus();
     startTgPoll();
     // (mobile drawer/active-nav/year are handled once by /site.js)
