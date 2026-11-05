@@ -2036,7 +2036,9 @@ a.btn-danger:hover {
 
 .page-head .hero-tagline {
   color: var(--navy-2);
-  margin: 0;
+  width: max-content;
+  max-width: 100%;
+  margin: 0 auto;
 }
 
 /* ---- contact channels ---- */
@@ -2286,4 +2288,3 @@ a.btn-danger:hover {
   }
 
 }
-
