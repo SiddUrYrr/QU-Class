@@ -7,6 +7,8 @@ optional Telegram bot. It shows attendance and timetable data, calculates the
 classes needed to reach 75%, tracks assignments, and alerts the student when
 attendance is marked.
 
+## inspire by https://github.com/karansin003/qattend
+
 ## What ClassQU does
 
 - Native email/password authentication with bcrypt password hashing.
