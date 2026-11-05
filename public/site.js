@@ -87,13 +87,12 @@
   }
 
   /**
-   * Public pages show Login/Register. If a session already exists, swap that
-   * cluster for a single "Go to Dashboard" link (existing /api/me endpoint —
-   * no new backend route, no user data rendered, no XSS surface).
+   * Public pages show Login/Register. If a session already exists, swap every
+   * auth action cluster for Dashboard + Logout (existing /api/me endpoint).
    */
   function initAuthSwap() {
-    var zone = document.querySelector('[data-auth-swap]');
-    if (!zone) return;
+    var zones = document.querySelectorAll('[data-auth-swap]');
+    if (!zones.length) return;
     fetch('/api/me', { credentials: 'same-origin' })
       .then(function (res) {
         return res.ok ? res.json() : null;
@@ -103,12 +102,20 @@
         Array.prototype.forEach.call(document.querySelectorAll('[data-auth-guest]'), function (el) {
           el.hidden = true;
         });
-        zone.textContent = '';
-        var link = document.createElement('a');
-        link.className = 'btn';
-        link.href = '/dashboard';
-        link.textContent = 'Go to Dashboard';
-        zone.appendChild(link);
+        Array.prototype.forEach.call(zones, function (zone) {
+          zone.textContent = '';
+          zone.hidden = false;
+          var dashboard = document.createElement('a');
+          dashboard.className = 'btn';
+          dashboard.href = '/dashboard';
+          dashboard.textContent = 'Dashboard';
+          zone.appendChild(dashboard);
+          var logout = document.createElement('a');
+          logout.className = 'btn btn-outline';
+          logout.href = '/logout';
+          logout.textContent = 'Logout';
+          zone.appendChild(logout);
+        });
       })
       .catch(function () {
         /* offline / API down — keep the Login + Register buttons as-is */

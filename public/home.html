@@ -54,8 +54,11 @@
       <a href="/about">ℹ️ About</a>
       <a href="/faq">❓ FAQ</a>
       <a href="/contact">✉️ Contact</a>
-      <a href="/login" data-auth-guest>🔑 Login</a>
-      <a href="/register" data-auth-guest>📝 Register</a>
+      <span data-auth-guest>
+        <a href="/login">🔑 Login</a>
+        <a href="/register">📝 Register</a>
+      </span>
+      <span data-auth-swap hidden></span>
     </nav>
   </aside>
 
@@ -71,7 +74,7 @@
             ClassQU helps students monitor their attendance and receive important attendance
             and academic notifications through Telegram — using their own QUMS data.
           </p>
-          <div class="hero-actions" data-auth-guest>
+          <div class="hero-actions" data-auth-swap>
             <a class="btn btn-lg" href="/register">Get Started</a>
             <a class="btn btn-lg btn-outline" href="/login">Login</a>
           </div>
@@ -383,7 +386,7 @@
     <section class="cta-band">
       <h2>Ready to stay updated?</h2>
       <p>Create your account, connect QUMS and Telegram, and let ClassQU keep you informed.</p>
-      <div class="cta-actions" data-auth-guest>
+      <div class="cta-actions" data-auth-swap>
         <a class="btn btn-lg" href="/register">Create Account</a>
         <a class="btn btn-lg btn-ghost" href="/login">Login</a>
       </div>
