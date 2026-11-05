@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Connect Telegram — ClassQU</title>
+  <meta name="description" content="Connect your Telegram account to ClassQU to receive personalized attendance and academic notifications." />
+  <meta name="theme-color" content="#1e3a8a" />
+  <meta name="robots" content="noindex" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/style.css" />
+  <script src="/site.js" defer></script>
+</head>
+<body>
+  <header class="nav">
+    <a class="brand brand-link" href="/dashboard">
+      <img src="/logo.svg" alt="ClassQU Logo" class="brand-logo" width="24" height="24" />
+      <span>ClassQU</span>
+    </a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="/dashboard">Dashboard</a>
+      <a href="/qums-setup">QUMS Setup</a>
+      <a href="/telegram-setup">Telegram</a>
+    </nav>
+    <div class="nav-actions">
+      <span class="pill" id="userName">…</span>
+      <a href="/logout" class="nav-logout">Logout</a>
+      <button id="navToggle" class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="drawer">☰</button>
+    </div>
+  </header>
+
+  <div id="drawerOverlay" class="drawer-overlay"></div>
+  <aside id="drawer" class="drawer" aria-hidden="true" aria-label="Mobile menu">
+    <div class="drawer-head">
+      <span>ClassQU</span>
+      <button type="button" class="drawer-close" aria-label="Close menu">✕</button>
+    </div>
+    <nav class="drawer-nav">
+      <a href="/dashboard">🏠 Dashboard</a>
+      <a href="/qums-setup">⚙️ QUMS Setup</a>
+      <a href="/telegram-setup">💬 Telegram</a>
+      <a href="/logout" class="drawer-logout">🚪 Logout</a>
+    </nav>
+  </aside>
+
+  <div class="container">
+    <div class="card">
+      <h1>Connect Telegram</h1>
+      <p class="sub">
+        Connect your Telegram account to receive personalized attendance and academic notifications.
+        Messages are sent only to the chat you link here.
+      </p>
+      <p><span id="tgBadge" class="badge-soft off">Checking connection…</span></p>
+
+      <div id="notConfiguredBox" class="banner warn hidden">
+        <span>
+          Telegram notifications are currently disabled on this deployment — the bot token is not
+          configured. Please contact the operator and try again later.
+        </span>
+      </div>
+
+      <!-- NOT CONNECTED -->
+      <div id="connectBox" class="hidden">
+        <div class="section-title">How to connect</div>
+        <ol class="steps">
+          <li>Press <b>Connect Telegram</b> — the ClassQU bot opens in Telegram.</li>
+          <li>Press <b>Start</b> in that chat (this is what links the chat to your account).</li>
+          <li>Come back here — the status updates automatically.</li>
+        </ol>
+        <div class="row" style="margin-top:14px;">
+          <a id="connectBtn" class="btn btn-lg" href="#" target="_blank" rel="noopener">Connect Telegram</a>
+        </div>
+        <p class="form-hint" id="waitingNote">Waiting for the chat to be linked… you can leave this page open.</p>
+      </div>
+
+      <!-- CONNECTED -->
+      <div id="connectedBox" class="hidden">
+        <div class="section-title" id="connectedTitle">✅ Connected!</div>
+        <p id="helloLine" style="font-size:1.02rem; font-weight:600; margin:4px 0 6px;">Hello 👋</p>
+        <p class="sub" id="connectedNote">You will now receive attendance updates here.</p>
+        <div class="row">
+          <a id="openTelegramBtn" class="btn btn-lg" href="#" target="_blank" rel="noopener">💬 Open Telegram</a>
+          <a class="btn btn-outline" href="/dashboard">Go to Dashboard</a>
+          <button id="unlinkBtn" class="btn btn-danger" type="button">Disconnect Telegram</button>
+        </div>
+      </div>
+
+      <div id="msg" class="form-ok hidden"></div>
+      <div id="errorBox" class="form-error hidden" role="alert" aria-live="polite"></div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">What you will receive here</div>
+      <ul class="check-list">
+        <li>Today's classes each morning, with timing, room and teacher.</li>
+        <li>An update when a teacher marks your attendance.</li>
+        <li>Alerts when attendance is entered later for an earlier class date.</li>
+        <li>New assignment notifications and a deadline reminder on the last date.</li>
+        <li>The attendance summary you send manually from the dashboard.</li>
+      </ul>
+      <p class="form-hint">Your email address is never displayed in Telegram — messages use your student name.</p>
+    </div>
+  </div>
+  <footer class="site-footer"><div class="footer-inner"><div class="footer-grid">
+    <div><div class="footer-brand"><span class="dot" aria-hidden="true"></span> ClassQU</div><p class="footer-tagline">Track. Alert. Stay Updated.</p><p class="footer-about">Monitor QUMS attendance and receive academic notifications through Telegram.</p></div>
+    <div class="footer-col"><h3>Guides</h3><ul><li><a href="/attendance-calculator-guide">Attendance Calculator</a></li><li><a href="/qums-troubleshooting">QUMS Troubleshooting</a></li><li><a href="/telegram-guide">Telegram Notifications</a></li></ul></div>
+    <div class="footer-col"><h3>Product</h3><ul><li><a href="/features">Features</a></li><li><a href="/faq">FAQ</a></li><li><a href="/contact">Contact</a></li></ul></div>
+    <div class="footer-col"><h3>Legal</h3><ul><li><a href="/privacy">Privacy Policy</a></li><li><a href="/terms">Terms &amp; Conditions</a></li><li><a href="/about">About</a></li></ul></div>
+  </div><div class="footer-bottom"><span>© <span data-year>2026</span> ClassQU. All rights reserved.</span><span>Not affiliated with the QUMS portal itself.</span></div></div></footer>
+
+  <script>
+    /*
+     * Telegram Setup page.
+     * Uses ONLY the existing endpoints: GET /api/me (student name) and
+     * GET /api/telegram/status (configured / connected / deep link), plus
+     * POST /api/telegram/unlink. The polling loop is the SAME single loop the
+     * dashboard uses, and it stops as soon as the chat is linked — no duplicate
+     * connections and no extra pollers are created.
+     */
+    const $ = (id) => document.getElementById(id);
+
+    let pollTimer = null;
+    let studentName = 'Student';
+    let sawFirstStatus = false;
+    let lastConnected = false;
+
+    function stopPoll() {
+      if (pollTimer) { clearInterval(pollTimer); pollTimer = null; }
+    }
+
+    function startPoll() {
+      stopPoll();
+      pollTimer = setInterval(loadStatus, 3000);
+    }
+
+    async function loadMe() {
+      try {
+        const res = await fetch('/api/me');
+        if (res.status === 401) { location.href = '/login'; return; }
+        const me = await res.json();
+        studentName = me.studentName || 'Student';
+        $('userName').textContent = studentName;
+      } catch {
+        /* offline — the status loader will surface what it can */
+      }
+    }
+
+    function showConnected(already, linkUrl) {
+      $('connectBox').classList.add('hidden');
+      $('notConfiguredBox').classList.add('hidden');
+      $('connectedBox').classList.remove('hidden');
+      $('connectedTitle').textContent = already ? '✅ Already Connected!' : '✅ Connected!';
+      $('helloLine').textContent = 'Hello ' + studentName + ' 👋';
+      $('connectedNote').textContent = already
+        ? 'You will continue to receive attendance updates here.'
+        : 'You will now receive attendance updates here.';
+      $('tgBadge').className = 'badge-soft on';
+      $('tgBadge').textContent = 'Telegram connected';
+      if (linkUrl) $('openTelegramBtn').href = linkUrl;
+    }
+
+    function showNotConnected(linkUrl) {
+      $('connectedBox').classList.add('hidden');
+      $('notConfiguredBox').classList.add('hidden');
+      $('connectBox').classList.remove('hidden');
+      $('tgBadge').className = 'badge-soft off';
+      $('tgBadge').textContent = 'Not connected';
+      if (linkUrl) $('connectBtn').href = linkUrl;
+    }
+
+    async function loadStatus() {
+      try {
+        const res = await fetch('/api/telegram/status');
+        if (res.status === 401) { location.href = '/login'; return; }
+        const st = await res.json();
+
+        if (!st.configured) {
+          stopPoll();
+          $('connectBox').classList.add('hidden');
+          $('connectedBox').classList.add('hidden');
+          $('notConfiguredBox').classList.remove('hidden');
+          $('tgBadge').className = 'badge-soft off';
+          $('tgBadge').textContent = 'Telegram disabled';
+          return;
+        }
+
+        if (st.connected) {
+          // First status already connected -> "Already connected".
+          // Connected during this visit -> "Connected!".
+          const already = !sawFirstStatus || lastConnected;
+          showConnected(already, st.linkUrl);
+          stopPoll();
+        } else {
+          if (lastConnected) {
+            /* just disconnected in this session */
+            $('msg').textContent = 'Telegram disconnected. No further messages will be sent to that chat.';
+            $('msg').classList.remove('hidden');
+          }
+          showNotConnected(st.linkUrl);
+          startPoll();
+        }
+
+        sawFirstStatus = true;
+        lastConnected = Boolean(st.connected);
+        $('errorBox').classList.add('hidden');
+      } catch (err) {
+        $('errorBox').textContent = 'Could not load Telegram status. Please check your connection and try again.';
+        $('errorBox').classList.remove('hidden');
+      }
+    }
+
+    $('unlinkBtn').addEventListener('click', async () => {
+      if (!confirm('Disconnect Telegram? No further messages will be sent to that chat.')) return;
+      const btn = $('unlinkBtn');
+      btn.disabled = true;
+      try {
+        const res = await fetch('/api/telegram/unlink', { method: 'POST' });
+        if (res.status === 401) { location.href = '/login'; return; }
+        $('msg').classList.add('hidden');
+      } catch {
+        $('errorBox').textContent = 'Disconnect failed. Please try again.';
+        $('errorBox').classList.remove('hidden');
+      }
+      btn.disabled = false;
+      loadStatus();
+    });
+
+    loadMe().then(loadStatus);
+  </script>
+</body>
+</html>

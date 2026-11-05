@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Features — ClassQU</title>
+  <meta name="description" content="Explore ClassQU features: automated QUMS attendance tracking, 8:30 AM class notifications, real-time class marks, backdated attendance detection, 7:00 PM assignment reminders, and student data isolation." />
+  <meta name="theme-color" content="#1e3a8a" />
+  <meta property="og:site_name" content="ClassQU" />
+  <meta property="og:title" content="Features — ClassQU" />
+  <meta property="og:description" content="What ClassQU actually does: attendance tracking, Telegram alerts, backdated detection, assignment updates and reminders." />
+  <meta property="og:type" content="website" />
+  <link rel="canonical" href="https://qattend.onrender.com/features" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/style.css" />
+  <script src="/site.js" defer></script>
+</head>
+<body>
+  <header class="nav">
+    <a class="brand brand-link" href="/">
+      <img src="/logo.svg" alt="ClassQU Logo" class="brand-logo" width="24" height="24" />
+      <span>ClassQU</span>
+    </a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="/">Home</a>
+      <a href="/features" class="active">Features</a>
+      <a href="/how-it-works">How It Works</a>
+      <a href="/attendance-calculator-guide">Calculator Guide</a>
+      <a href="/about">About</a>
+      <a href="/faq">FAQ</a>
+      <a href="/contact">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <span class="nav-cta" data-auth-swap>
+        <a class="btn btn-ghost" href="/login">Login</a>
+        <a class="btn" href="/register">Register</a>
+      </span>
+      <button id="navToggle" class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="drawer">☰</button>
+    </div>
+  </header>
+
+  <div id="drawerOverlay" class="drawer-overlay"></div>
+  <aside id="drawer" class="drawer" aria-hidden="true" aria-label="Mobile menu">
+    <div class="drawer-head">ClassQU</div>
+    <nav class="drawer-nav">
+      <a href="/">🏠 Home</a>
+      <a href="/features">✨ Features</a>
+      <a href="/how-it-works">🔄 How It Works</a>
+      <a href="/attendance-calculator-guide">🧮 Calculator Guide</a>
+      <a href="/qums-troubleshooting">🔧 QUMS Troubleshooting</a>
+      <a href="/telegram-guide">💬 Telegram Guide</a>
+      <a href="/security-and-privacy">🔒 Security &amp; Privacy</a>
+      <a href="/about">ℹ️ About</a>
+      <a href="/faq">❓ FAQ</a>
+      <a href="/contact">✉️ Contact</a>
+      <a href="/login">🔑 Login</a>
+      <a href="/register">📝 Register</a>
+    </nav>
+  </aside>
+
+  <main>
+    <section class="page-head">
+      <h1>ClassQU Features</h1>
+      <p class="hero-tagline">Track. Alert. Stay Updated.</p>
+      <p style="margin-top:10px;">
+        An in-depth breakdown of every active capability in ClassQU. Each feature is grounded directly in our production implementation.
+      </p>
+    </section>
+
+    <section class="section">
+      <div class="section-inner">
+        <h2 class="section-title-lg">Attendance Intelligence &amp; Analysis</h2>
+        <p class="section-lead">Transform raw university records into actionable academic insight.</p>
+
+        <div class="grid grid-3">
+          <div class="feature-card">
+            <div class="feature-icon" aria-hidden="true">📊</div>
+            <h3>Subject-by-Subject Tracking</h3>
+            <p>
+              ClassQU extracts your authenticated attendance table from the QUMS portal, categorizing records by subject name, course code, attended lectures, and total classes held. It shows current percentages alongside your official portal overall percentage.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon" aria-hidden="true">🎯</div>
+            <h3>75% Recovery Guidance</h3>
+            <p>
+              If a subject falls below the required 75% examination threshold, ClassQU calculates the exact number of consecutive future lectures you must attend using the formula <code>Math.ceil((0.75 * Total - Attended) / 0.25)</code>.
+            </p>
+            <p style="margin-top:8px;">
+              <a href="/attendance-calculator-guide" style="font-size:0.85rem; font-weight:600; color:var(--navy-2,#1e3a8a);">Read Calculator Guide →</a>
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon" aria-hidden="true">🛡️</div>
+            <h3>Safe Bunk / Margin Margin</h3>
+            <p>
+              When attendance is healthy (≥ 75%), ClassQU computes your skippable buffer using <code>Math.floor((Attended - 0.75 * Total) / 0.75)</code>, telling you precisely how many classes you can afford to miss without falling below the regulatory limit.
+            </p>
+          </div>
+        </div>
+
+        <h2 class="section-title-lg" style="margin-top:40px;">Real-Time Telegram Automation</h2>
+        <p class="section-lead">Automated notifications delivered directly to your personal Telegram conversation.</p>
+
+        <div class="grid grid-3">
+          <div class="feature-card">
+            <div class="feature-icon" aria-hidden="true">🌅</div>
+            <h3>8:30 AM Daily Timetable</h3>
+            <p>
+              Every morning at 8:30 AM IST (before 9:00 AM lectures begin), ClassQU pushes your complete daily schedule to Telegram with room numbers, period timings, and assigned faculty members.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon" aria-hidden="true">⚡</div>
+            <h3>Real-Time Period Alerts</h3>
+            <p>
+              During college hours (08:30–17:00 IST), our fast polling loop checks your timetable every 5 minutes. As soon as a professor marks attendance, an instant alert arrives with the course name, teacher, and status (✅ Present / ❌ Absent).
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon" aria-hidden="true">🗓️</div>
+            <h3>Backdated Month Register Scans</h3>
+            <p>
+              When faculty update records retroactively for earlier dates, standard daily checks miss them. ClassQU scans the university's full Month Register every 10 minutes to notify you of retroactive modifications with the exact historical class date.
+            </p>
+          </div>
+        </div>
+
+        <h2 class="section-title-lg" style="margin-top:40px;">Academic Deadlines &amp; Bot Commands</h2>
+        <p class="section-lead">Never lose track of assignments, due dates, or historical records.</p>
+
+        <div class="grid grid-3">
+          <div class="feature-card">
+            <div class="feature-icon" aria-hidden="true">📚</div>
+            <h3>New Assignment Discovery</h3>
+            <p>
+              ClassQU polls the university assignment API every 30 minutes. Newly published assignments, quizzes, and practical write-ups are immediately dispatched to your Telegram chat with topic details and deadlines.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon" aria-hidden="true">⏰</div>
+            <h3>7:00 PM Deadline Warnings</h3>
+            <p>
+              Every evening at 7:00 PM IST, ClassQU reviews upcoming assignment deadlines. If an assignment is due today, you receive an urgent reminder so you have sufficient time to complete and submit it.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon" aria-hidden="true">💬</div>
+            <h3>Historical Date Lookups</h3>
+            <p>
+              Send any date in <code>DD/MM/YYYY</code> format (e.g., <code>14/10/2026</code>) directly to the Telegram bot to inspect your exact attendance breakdown for that calendar date. Responses auto-delete after 60 seconds to maintain chat cleanliness.
+            </p>
+            <p style="margin-top:8px;">
+              <a href="/telegram-guide" style="font-size:0.85rem; font-weight:600; color:var(--navy-2,#1e3a8a);">Read Telegram Guide →</a>
+            </p>
+          </div>
+        </div>
+
+        <h2 class="section-title-lg" style="margin-top:40px;">Security &amp; Student Privacy</h2>
+        <p class="section-lead">Engineering practices designed to safeguard student accounts.</p>
+
+        <div class="grid grid-3">
+          <div class="feature-card">
+            <div class="feature-icon" aria-hidden="true">🔐</div>
+            <h3>AES-256-GCM Encryption</h3>
+            <p>
+              University passwords stored for session recovery are encrypted using AES-256-GCM authenticated encryption with unique initialization vectors and SHA-256/scrypt key derivation.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon" aria-hidden="true">👥</div>
+            <h3>Strict Multi-User Isolation</h3>
+            <p>
+              Each student account maintains an isolated session file (mode <code>0600</code>), separate database rows, and a unique Telegram chat ID. Your academic data is never cross-shared or pooled.
+            </p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon" aria-hidden="true">🗑️</div>
+            <h3>Permanent Reset Control</h3>
+            <p>
+              You maintain total authority over your data. A single click on <strong>Reset / Delete QUMS Connection</strong> permanently destroys saved university credentials and deletes active session files from disk.
+            </p>
+            <p style="margin-top:8px;">
+              <a href="/security-and-privacy" style="font-size:0.85rem; font-weight:600; color:var(--navy-2,#1e3a8a);">Read Security Architecture →</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-band">
+      <h2>Ready to Stay Updated?</h2>
+      <p>Create your free account, connect QUMS and Telegram, and let the updates come to you.</p>
+      <div class="cta-actions">
+        <a class="btn btn-lg" href="/register">Create Account</a>
+        <a class="btn btn-lg btn-ghost" href="/login">Login</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand"><span class="dot" aria-hidden="true"></span> ClassQU</div>
+          <p class="footer-tagline">Track. Alert. Stay Updated.</p>
+          <p class="footer-about">
+            ClassQU helps students monitor their QUMS attendance and receive attendance and academic notifications through Telegram.
+          </p>
+        </div>
+        <div class="footer-col">
+          <h3>Guides</h3>
+          <ul>
+            <li><a href="/attendance-calculator-guide">Attendance Calculator</a></li>
+            <li><a href="/qums-troubleshooting">QUMS Troubleshooting</a></li>
+            <li><a href="/telegram-guide">Telegram Notifications</a></li>
+            <li><a href="/security-and-privacy">Data Security Guide</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Product</h3>
+          <ul>
+            <li><a href="/features">Features</a></li>
+            <li><a href="/how-it-works">How It Works</a></li>
+            <li><a href="/faq">FAQ</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Legal</h3>
+          <ul>
+            <li><a href="/privacy">Privacy Policy</a></li>
+            <li><a href="/terms">Terms &amp; Conditions</a></li>
+            <li><a href="/contact">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© <span data-year>2026</span> ClassQU. All rights reserved.</span>
+        <span>Not affiliated with the QUMS portal itself. Data belongs to the student's own QUMS account.</span>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

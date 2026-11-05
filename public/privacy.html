@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy — ClassQU</title>
+  <meta name="description" content="ClassQU Privacy Policy: what account, QUMS, attendance and Telegram information ClassQU stores, how it is used, how it is protected, and the choices you have." />
+  <meta name="theme-color" content="#1e3a8a" />
+  <meta property="og:site_name" content="ClassQU" />
+  <meta property="og:title" content="Privacy Policy — ClassQU" />
+  <meta property="og:description" content="How ClassQU handles your account, QUMS connection, attendance data and Telegram link." />
+  <meta property="og:type" content="article" />
+  <link rel="canonical" href="https://qattend.onrender.com/privacy" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/style.css" />
+  <script src="/site.js" defer></script>
+</head>
+<body>
+  <header class="nav">
+    <a class="brand brand-link" href="/">
+      <img src="/logo.svg" alt="ClassQU Logo" class="brand-logo" width="24" height="24" />
+      <span>ClassQU</span>
+    </a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="/">Home</a>
+      <a href="/features">Features</a>
+      <a href="/how-it-works">How It Works</a>
+      <a href="/attendance-calculator-guide">Calculator Guide</a>
+      <a href="/about">About</a>
+      <a href="/faq">FAQ</a>
+      <a href="/contact">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <span class="nav-cta" data-auth-swap>
+        <a class="btn btn-ghost" href="/login">Login</a>
+        <a class="btn" href="/register">Register</a>
+      </span>
+      <button id="navToggle" class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="drawer">☰</button>
+    </div>
+  </header>
+
+  <div id="drawerOverlay" class="drawer-overlay"></div>
+  <aside id="drawer" class="drawer" aria-hidden="true" aria-label="Mobile menu">
+    <div class="drawer-head">ClassQU</div>
+    <nav class="drawer-nav">
+      <a href="/">🏠 Home</a>
+      <a href="/features">✨ Features</a>
+      <a href="/how-it-works">🔄 How It Works</a>
+      <a href="/attendance-calculator-guide">🧮 Calculator Guide</a>
+      <a href="/qums-troubleshooting">🔧 QUMS Troubleshooting</a>
+      <a href="/telegram-guide">💬 Telegram Guide</a>
+      <a href="/security-and-privacy">🔒 Security &amp; Privacy</a>
+      <a href="/about">ℹ️ About</a>
+      <a href="/faq">❓ FAQ</a>
+      <a href="/contact">✉️ Contact</a>
+      <a href="/login">🔑 Login</a>
+      <a href="/register">📝 Register</a>
+    </nav>
+  </aside>
+
+  <main>
+    <section class="page-head">
+      <h1>Privacy Policy</h1>
+      <p>Written for ClassQU specifically — what is stored, why, and what you can do about it.</p>
+    </section>
+
+    <section class="section">
+      <div class="section-inner">
+        <div class="prose">
+          <p class="legal-meta">Last updated: 25 September 2026</p>
+
+          <p>
+            ClassQU is a student attendance tracking and notification platform. To work, it must
+            store a small amount of information about your account and hold a connection to your
+            QUMS account. This policy explains exactly what that means.
+          </p>
+          <p>
+            This document describes ClassQU's own behaviour. It is not a claim of certification or
+            compliance with any particular regulation or standard.
+          </p>
+
+          <h2>1. Information we collect and store</h2>
+          <h3>Account information</h3>
+          <ul>
+            <li>Your email address, used as your ClassQU login identifier.</li>
+            <li>An internal account id and the date your account was created.</li>
+            <li>Your student name, once ClassQU reads it from your QUMS account. It is used so the dashboard and Telegram messages address you by name instead of your email.</li>
+          </ul>
+
+          <h3>Authentication information</h3>
+          <ul>
+            <li>Sign-in and password reset are handled by native email/password authentication. ClassQU stores a bcrypt password hash and uses a server-side session.</li>
+            <li>ClassQU stores only a one-way bcrypt password hash; it never stores your password in readable form.</li>
+            <li>Existing accounts retain their one-way bcrypt password hashes.</li>
+          </ul>
+
+          <h3>QUMS connection information</h3>
+          <ul>
+            <li>Your QUMS QID and QUMS password. The password is stored <strong>encrypted</strong> so ClassQU can reconnect when the portal session expires.</li>
+            <li>A QUMS session file for your account, created when you complete the QUMS captcha login. It is used to read data from the portal on your behalf.</li>
+          </ul>
+
+          <h3>Academic and attendance information</h3>
+          <ul>
+            <li>Attendance records read from your QUMS account: subjects, subject codes, attended and total class counts, percentages, periods, teachers and rooms.</li>
+            <li>Your timetable as published in the portal.</li>
+            <li>Assignment information read from the portal, and internal bookkeeping so the same assignment is not announced twice.</li>
+            <li>Internal per-user state used for change detection, so alerts are not repeated for the same event.</li>
+          </ul>
+
+          <h3>Telegram linkage</h3>
+          <ul>
+            <li>A link code created for your account, and your Telegram chat id once you connect.</li>
+            <li>This is what allows messages to be delivered to your chat — and only your chat.</li>
+          </ul>
+
+          <h3>Session, cookies and advertising</h3>
+          <ul>
+            <li>ClassQU sets one session cookie to keep you logged in. It is HttpOnly, and it expires after 90 days of inactivity.</li>
+            <li>Currently, ClassQU does not serve active advertisements and does not use advertising, profiling or third-party tracking cookies.</li>
+            <li><strong>Advertising readiness disclosure:</strong> When third-party advertising (such as Google AdSense) is enabled on public informational pages in the future, third-party vendors, including Google, will use cookies (such as advertising cookies) to serve ads based on prior visits to this website or other websites. Google's use of advertising cookies enables it and its partners to serve ads based on your visits to sites across the Internet. Users will be able to opt out of personalized advertising at any time by visiting <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener">Google Ads Settings</a> or <a href="https://www.aboutads.info" target="_blank" rel="noopener">aboutads.info</a>. This policy will be updated with live details when an advertising network is active.</li>
+          </ul>
+          <h2>2. How the information is used</h2>
+          <ul>
+            <li>To check your attendance, timetable and assignments on the QUMS portal on your behalf.</li>
+            <li>To calculate subject-wise attendance percentages and the guidance shown for the 75% requirement.</li>
+            <li>To decide when something has genuinely changed and a notification is warranted.</li>
+            <li>To deliver those notifications to the Telegram chat you linked.</li>
+            <li>To keep you logged in, protect your account (for example, rate limiting repeated login or reset attempts), and diagnose problems.</li>
+          </ul>
+          <p>
+            ClassQU does not use your information for advertising, profiling or resale, and it does
+            not use your academic data for anything other than producing your own attendance
+            tracking and notifications.
+          </p>
+
+          <h2>3. Notifications</h2>
+          <p>
+            Notifications are generated from your own account's data and sent to the Telegram chat
+            that is linked to your account. Notification types include: today's classes, attendance
+            updates when marks are entered, attendance entered later for an earlier class date, new
+            assignments, assignment deadline reminders on the last date, session-expiry notices, and
+            the attendance summary you request manually from the dashboard.
+          </p>
+          <p>
+            ClassQU does not operate an automatic nightly attendance summary. A summary is only sent
+            when you press the button.
+          </p>
+
+          <h2>4. Security practices</h2>
+          <ul>
+            <li>QUMS passwords are encrypted before they are stored, using a key supplied through server environment variables.</li>
+            <li>Application secrets (session secret, encryption key, Telegram bot token, database credentials) are held in environment variables, never written into pages or logs.</li>
+            <li>The session cookie is HttpOnly, and in production it is sent over HTTPS only.</li>
+            <li>Authentication endpoints are rate limited to reduce abuse.</li>
+            <li>Every user's data is isolated: your QUMS session, attendance data, assignment state and Telegram link belong to your account alone.</li>
+          </ul>
+          <p>
+            No system can promise absolute security. If you believe your account has been
+            compromised, disconnect Telegram and reset your ClassQU and QUMS passwords, then let us
+            know through the <a href="/contact">Contact</a> page.
+          </p>
+
+          <h2>5. Data retention</h2>
+          <ul>
+            <li>Account information and academic data are kept while your account exists, because they are needed to track attendance over time.</li>
+            <li>Your stored QUMS session is deleted when you log out of QUMS from the dashboard, and can be removed entirely with the QUMS reset control.</li>
+            <li>Your Telegram chat id is cleared when you press Disconnect.</li>
+            <li>The login session cookie expires after 90 days, or immediately when you log out.</li>
+          </ul>
+          <p>
+            If you would like your ClassQU account and its stored data deleted, request it through
+            the <a href="/contact">Contact</a> page. Because account deletion is a manual step on
+            this deployment, the request is handled directly rather than through a self-service
+            button.
+          </p>
+          <h2>6. Third-party services actually used</h2>
+          <ul>
+            <li><strong>native email/password authentication (Google)</strong> — account sign-in and password-reset emails.</li>
+            <li><strong>Telegram Bot API</strong> — delivery of your notifications to the chat you linked.</li>
+            <li><strong>The hosting provider running this deployment</strong> — application hosting and, where configured, the managed database that stores ClassQU's application data.</li>
+            <li><strong>The QUMS portal</strong> — the source of your attendance, timetable and assignment data. Reading it is the entire purpose of the connection you set up.</li>
+          </ul>
+          <p>
+            That is the complete list for the current deployment. ClassQU does not include analytics
+            scripts, advertising networks or social tracking. Password reset emails are currently
+            sent by the configured Resend provider; local development can use the safe development fallback.
+          </p>
+
+          <h2>7. What ClassQU does not do</h2>
+          <ul>
+            <li>It does not sell, rent or trade your information.</li>
+            <li>It does not send your attendance to other students, or allow anyone else to read your account.</li>
+            <li>It does not display your QUMS password anywhere — not on a page, and never in a Telegram message.</li>
+            <li>It does not use your data to train models or build advertising profiles.</li>
+          </ul>
+
+          <h2>8. Your choices and controls</h2>
+          <ul>
+            <li><strong>Disconnect Telegram</strong> from the dashboard or the Telegram page at any time.</li>
+            <li><strong>Log out of QUMS</strong> to delete the stored portal session, or use the QUMS reset control to remove the saved QID and password entirely.</li>
+            <li><strong>Logout</strong> from the menu to end the browser session.</li>
+            <li><strong>Reset your ClassQU password</strong> through the Forgot Password flow.</li>
+            <li><strong>Request deletion</strong> of your account and its stored data through the Contact page.</li>
+          </ul>
+
+          <h2>9. Changes to this policy</h2>
+          <p>
+            ClassQU is under active development, and this policy will be updated when what the
+            application stores or does changes. The "Last updated" date above is changed whenever
+            that happens.
+          </p>
+
+          <h2>10. Contact</h2>
+          <p>
+            Privacy questions, or a request to delete your data, can be raised through the
+            <a href="/contact">Contact page</a>. Please do not include your QUMS password, QID,
+            session files or any server secret in a message.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand"><span class="dot" aria-hidden="true"></span> ClassQU</div>
+          <p class="footer-tagline">Track. Alert. Stay Updated.</p>
+          <p class="footer-about">
+            ClassQU helps students monitor their QUMS attendance and receive attendance and
+            academic notifications through Telegram.
+          </p>
+        </div>
+        <div class="footer-col">
+          <h3>Guides</h3>
+          <ul>
+            <li><a href="/attendance-calculator-guide">Attendance Calculator</a></li>
+            <li><a href="/qums-troubleshooting">QUMS Troubleshooting</a></li>
+            <li><a href="/telegram-guide">Telegram Notifications</a></li>
+            <li><a href="/security-and-privacy">Data Security Guide</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Product</h3>
+          <ul>
+            <li><a href="/features">Features</a></li>
+            <li><a href="/how-it-works">How It Works</a></li>
+            <li><a href="/faq">FAQ</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Legal</h3>
+          <ul>
+            <li><a href="/privacy">Privacy Policy</a></li>
+            <li><a href="/terms">Terms &amp; Conditions</a></li>
+            <li><a href="/contact">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© <span data-year>2026</span> ClassQU. All rights reserved.</span>
+        <span>Not affiliated with the QUMS portal itself. Data belongs to the student's own QUMS account.</span>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Attendance Calculator &amp; 75% Attendance Rule Guide — ClassQU</title>
+  <meta name="description" content="Learn how university attendance percentages are calculated, the exact formulas to reach 75%, how many classes you can afford to miss, and use our interactive attendance calculator." />
+  <meta name="theme-color" content="#1e3a8a" />
+  <meta property="og:site_name" content="ClassQU" />
+  <meta property="og:title" content="Attendance Calculator &amp; 75% Attendance Rule Guide — ClassQU" />
+  <meta property="og:description" content="Step-by-step mathematical guide and formulas for university attendance, calculating classes needed for 75%, margin of skippable classes, and interactive calculator." />
+  <meta property="og:type" content="article" />
+  <link rel="canonical" href="https://qattend.onrender.com/attendance-calculator-guide" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/style.css" />
+  <script src="/site.js" defer></script>
+</head>
+<body>
+  <header class="nav">
+    <a class="brand brand-link" href="/">
+      <img src="/logo.svg" alt="ClassQU Logo" class="brand-logo" width="24" height="24" />
+      <span>ClassQU</span>
+    </a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="/">Home</a>
+      <a href="/features">Features</a>
+      <a href="/how-it-works">How It Works</a>
+      <a href="/attendance-calculator-guide" class="active">Calculator Guide</a>
+      <a href="/about">About</a>
+      <a href="/faq">FAQ</a>
+      <a href="/contact">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <span class="nav-cta" data-auth-swap>
+        <a class="btn btn-ghost" href="/login">Login</a>
+        <a class="btn" href="/register">Register</a>
+      </span>
+      <button id="navToggle" class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="drawer">☰</button>
+    </div>
+  </header>
+
+  <div id="drawerOverlay" class="drawer-overlay"></div>
+  <aside id="drawer" class="drawer" aria-hidden="true" aria-label="Mobile menu">
+    <div class="drawer-head">ClassQU</div>
+    <nav class="drawer-nav">
+      <a href="/">🏠 Home</a>
+      <a href="/features">✨ Features</a>
+      <a href="/how-it-works">🔄 How It Works</a>
+      <a href="/attendance-calculator-guide">🧮 Calculator Guide</a>
+      <a href="/qums-troubleshooting">🔧 QUMS Troubleshooting</a>
+      <a href="/telegram-guide">💬 Telegram Guide</a>
+      <a href="/security-and-privacy">🔒 Security &amp; Privacy</a>
+      <a href="/about">ℹ️ About</a>
+      <a href="/faq">❓ FAQ</a>
+      <a href="/contact">✉️ Contact</a>
+      <a href="/login">🔑 Login</a>
+      <a href="/register">📝 Register</a>
+    </nav>
+  </aside>
+
+  <main>
+    <section class="page-head">
+      <h1>Attendance Percentage Calculator &amp; 75% Guide</h1>
+      <p class="hero-tagline">Track. Calculate. Stay Safe.</p>
+      <p style="margin-top:10px;">
+        A comprehensive guide to understanding attendance formulas, calculating how many classes you must attend to cross 75%, and knowing how many you can safely miss.
+      </p>
+    </section>
+
+    <section class="section">
+      <div class="section-inner">
+        <!-- Interactive Client-side Calculator Card -->
+        <div class="card" style="max-width:760px; margin:0 auto 36px; background:#ffffff; border:1px solid #cbd5e1; box-shadow:0 4px 16px rgba(15,23,42,0.08);">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+            <span style="font-size:1.6rem;" aria-hidden="true">🧮</span>
+            <div>
+              <h2 style="margin:0; font-size:1.25rem; color:var(--navy,#0f172a);">Interactive 75% Attendance Calculator</h2>
+              <p style="margin:2px 0 0; font-size:0.86rem; color:var(--muted,#64748b);">Calculate your current percentage and see exactly what is needed for 75%.</p>
+            </div>
+          </div>
+
+          <form id="calcForm" onsubmit="event.preventDefault();" style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:16px;">
+            <div>
+              <label for="inputAttended" style="display:block; font-size:0.85rem; font-weight:600; color:#334155; margin-bottom:6px;">Classes Attended</label>
+              <input type="number" id="inputAttended" min="0" value="18" placeholder="e.g. 18" style="width:100%; padding:10px 12px; border:1px solid #cbd5e1; border-radius:8px; font-size:1rem; box-sizing:border-box;" required />
+            </div>
+            <div>
+              <label for="inputTotal" style="display:block; font-size:0.85rem; font-weight:600; color:#334155; margin-bottom:6px;">Total Classes Conducted</label>
+              <input type="number" id="inputTotal" min="1" value="28" placeholder="e.g. 28" style="width:100%; padding:10px 12px; border:1px solid #cbd5e1; border-radius:8px; font-size:1rem; box-sizing:border-box;" required />
+            </div>
+          </form>
+
+          <div id="calcOutput" style="margin-top:20px; padding:16px; border-radius:10px; background:#f8fafc; border:1px solid #e2e8f0;">
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:12px; text-align:center;">
+              <div style="background:#fff; padding:12px; border-radius:8px; border:1px solid #e2e8f0;">
+                <span style="display:block; font-size:0.75rem; text-transform:uppercase; color:#64748b; font-weight:700;">Current Percentage</span>
+                <span id="outPct" style="display:block; font-size:1.4rem; font-weight:800; color:#0284c7; margin-top:4px;">64.29%</span>
+              </div>
+              <div style="background:#fff; padding:12px; border-radius:8px; border:1px solid #e2e8f0;">
+                <span style="display:block; font-size:0.75rem; text-transform:uppercase; color:#64748b; font-weight:700;">Status</span>
+                <span id="outStatus" style="display:block; font-size:1.15rem; font-weight:700; color:#dc2626; margin-top:6px;">Below 75%</span>
+              </div>
+              <div style="background:#fff; padding:12px; border-radius:8px; border:1px solid #e2e8f0;">
+                <span style="display:block; font-size:0.75rem; text-transform:uppercase; color:#64748b; font-weight:700;">Action Required</span>
+                <span id="outAction" style="display:block; font-size:1.1rem; font-weight:700; color:#0f172a; margin-top:6px;">Attend 12 more</span>
+              </div>
+            </div>
+            <p id="outExplanation" style="margin:14px 0 0; font-size:0.88rem; line-height:1.5; color:#334155; text-align:center;">
+              You have attended <strong>18</strong> out of <strong>28</strong> classes. You need to attend <strong>12</strong> consecutive classes to reach exactly 75.00%.
+            </p>
+          </div>
+        </div>
+
+        <!-- Main Educational Content -->
+        <article class="prose">
+          <h2>1. The Fundamental Attendance Formula</h2>
+          <p>
+            University examination regulations generally require students to maintain a minimum of <strong>75% attendance</strong> in each subject to be eligible to sit for semester examinations. The basic formula to determine your attendance percentage at any point during the semester is:
+          </p>
+
+          <div style="background:#f1f5f9; padding:14px 18px; border-radius:8px; border-left:4px solid #0284c7; font-family:monospace; font-size:1rem; margin:16px 0;">
+            Attendance Percentage (%) = (Attended Classes / Total Classes Conducted) × 100
+          </div>
+
+          <p>
+            For example, if <strong>40</strong> lectures have been conducted so far and you were present for <strong>32</strong> of them:
+          </p>
+          <ul>
+            <li>Percentage = (32 / 40) × 100 = <strong>80.00%</strong></li>
+            <li>Since 80.00% is greater than or equal to 75%, your status is satisfactory.</li>
+          </ul>
+
+          <h2>2. How to Calculate Classes Needed to Reach 75%</h2>
+          <p>
+            When your attendance in a subject slips below 75%, simply attending the next class is not always enough. Every future class you attend increases both your attended count <em>and</em> the total class count.
+          </p>
+          <p>
+            Let <em>A</em> represent your current attended classes, <em>T</em> represent the total classes held so far, and <em>k</em> represent the number of consecutive future classes you must attend without missing any.
+          </p>
+          <p>
+            The mathematical inequality required to reach at least 75% is:
+          </p>
+
+          <div style="background:#f1f5f9; padding:14px 18px; border-radius:8px; font-family:monospace; font-size:0.95rem; margin:16px 0; overflow-x:auto;">
+            (A + k) / (T + k) ≥ 0.75<br />
+            4 × (A + k) ≥ 3 × (T + k)<br />
+            4A + 4k ≥ 3T + 3k<br />
+            k ≥ 3T - 4A
+          </div>
+
+          <p>
+            Equivalently, this can be written as:
+          </p>
+          <div style="background:#f1f5f9; padding:14px 18px; border-radius:8px; border-left:4px solid #0284c7; font-family:monospace; font-size:1rem; margin:16px 0;">
+            Classes Needed (k) = Math.ceil((0.75 × Total - Attended) / 0.25)
+          </div>
+
+          <h3>Worked Examples: Recovering Below 75%</h3>
+          <div style="overflow-x:auto;">
+            <table style="width:100%; border-collapse:collapse; margin:16px 0; font-size:0.88rem; text-align:left;">
+              <thead>
+                <tr style="background:#f8fafc; border-bottom:2px solid #cbd5e1;">
+                  <th style="padding:10px 12px;">Scenario</th>
+                  <th style="padding:10px 12px;">Attended / Total</th>
+                  <th style="padding:10px 12px;">Current %</th>
+                  <th style="padding:10px 12px;">Calculation: 3T - 4A</th>
+                  <th style="padding:10px 12px;">Classes Needed</th>
+                  <th style="padding:10px 12px;">Resulting Record</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom:1px solid #e2e8f0;">
+                  <td style="padding:10px 12px;"><strong>Example 1</strong></td>
+                  <td style="padding:10px 12px;">12 / 20</td>
+                  <td style="padding:10px 12px; color:#dc2626; font-weight:700;">60.00%</td>
+                  <td style="padding:10px 12px;">3(20) - 4(12) = 60 - 48 = 12</td>
+                  <td style="padding:10px 12px; font-weight:700;">12 classes</td>
+                  <td style="padding:10px 12px;">24 / 32 = 75.00%</td>
+                </tr>
+                <tr style="border-bottom:1px solid #e2e8f0;">
+                  <td style="padding:10px 12px;"><strong>Example 2</strong></td>
+                  <td style="padding:10px 12px;">18 / 28</td>
+                  <td style="padding:10px 12px; color:#dc2626; font-weight:700;">64.29%</td>
+                  <td style="padding:10px 12px;">3(28) - 4(18) = 84 - 72 = 12</td>
+                  <td style="padding:10px 12px; font-weight:700;">12 classes</td>
+                  <td style="padding:10px 12px;">30 / 40 = 75.00%</td>
+                </tr>
+                <tr style="border-bottom:1px solid #e2e8f0;">
+                  <td style="padding:10px 12px;"><strong>Example 3</strong></td>
+                  <td style="padding:10px 12px;">30 / 45</td>
+                  <td style="padding:10px 12px; color:#dc2626; font-weight:700;">66.67%</td>
+                  <td style="padding:10px 12px;">3(45) - 4(30) = 135 - 120 = 15</td>
+                  <td style="padding:10px 12px; font-weight:700;">15 classes</td>
+                  <td style="padding:10px 12px;">45 / 60 = 75.00%</td>
+                </tr>
+                <tr style="border-bottom:1px solid #e2e8f0;">
+                  <td style="padding:10px 12px;"><strong>Example 4</strong></td>
+                  <td style="padding:10px 12px;">37 / 50</td>
+                  <td style="padding:10px 12px; color:#dc2626; font-weight:700;">74.00%</td>
+                  <td style="padding:10px 12px;">3(50) - 4(37) = 150 - 148 = 2</td>
+                  <td style="padding:10px 12px; font-weight:700;">2 classes</td>
+                  <td style="padding:10px 12px;">39 / 52 = 75.00%</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2>3. How Many Classes Can You Miss While Staying ≥ 75%?</h2>
+          <p>
+            If your attendance is currently comfortable (e.g., 85% or 90%), you may want to know how many classes you could miss due to illness, personal events, or exam preparation without dropping below the 75% safety line.
+          </p>
+          <p>
+            When you miss a class, your attended count <em>A</em> remains constant, but the total class count increases by <em>k</em>.
+          </p>
+          <div style="background:#f1f5f9; padding:14px 18px; border-radius:8px; font-family:monospace; font-size:0.95rem; margin:16px 0; overflow-x:auto;">
+            A / (T + k) ≥ 0.75<br />
+            4A ≥ 3 × (T + k) = 3T + 3k<br />
+            3k ≤ 4A - 3T<br />
+            k ≤ (4A - 3T) / 3
+          </div>
+
+          <p>
+            Taking the integer floor:
+          </p>
+          <div style="background:#f1f5f9; padding:14px 18px; border-radius:8px; border-left:4px solid #16a34a; font-family:monospace; font-size:1rem; margin:16px 0;">
+            Margin (Skippable Classes) = Math.floor((Attended - 0.75 × Total) / 0.75)
+          </div>
+
+          <h3>Worked Examples: Margin &amp; Bunkable Classes</h3>
+          <div style="overflow-x:auto;">
+            <table style="width:100%; border-collapse:collapse; margin:16px 0; font-size:0.88rem; text-align:left;">
+              <thead>
+                <tr style="background:#f8fafc; border-bottom:2px solid #cbd5e1;">
+                  <th style="padding:10px 12px;">Scenario</th>
+                  <th style="padding:10px 12px;">Attended / Total</th>
+                  <th style="padding:10px 12px;">Current %</th>
+                  <th style="padding:10px 12px;">Calculation: (A - 0.75T) / 0.75</th>
+                  <th style="padding:10px 12px;">Can Miss</th>
+                  <th style="padding:10px 12px;">Resulting % If Missed</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom:1px solid #e2e8f0;">
+                  <td style="padding:10px 12px;"><strong>High Buffer</strong></td>
+                  <td style="padding:10px 12px;">18 / 20</td>
+                  <td style="padding:10px 12px; color:#16a34a; font-weight:700;">90.00%</td>
+                  <td style="padding:10px 12px;">(18 - 15) / 0.75 = 3 / 0.75 = 4</td>
+                  <td style="padding:10px 12px; font-weight:700;">4 classes</td>
+                  <td style="padding:10px 12px;">18 / 24 = 75.00%</td>
+                </tr>
+                <tr style="border-bottom:1px solid #e2e8f0;">
+                  <td style="padding:10px 12px;"><strong>Moderate Buffer</strong></td>
+                  <td style="padding:10px 12px;">24 / 30</td>
+                  <td style="padding:10px 12px; color:#16a34a; font-weight:700;">80.00%</td>
+                  <td style="padding:10px 12px;">(24 - 22.5) / 0.75 = 1.5 / 0.75 = 2</td>
+                  <td style="padding:10px 12px; font-weight:700;">2 classes</td>
+                  <td style="padding:10px 12px;">24 / 32 = 75.00%</td>
+                </tr>
+                <tr style="border-bottom:1px solid #e2e8f0;">
+                  <td style="padding:10px 12px;"><strong>Tight Margin</strong></td>
+                  <td style="padding:10px 12px;">20 / 25</td>
+                  <td style="padding:10px 12px; color:#16a34a; font-weight:700;">80.00%</td>
+                  <td style="padding:10px 12px;">(20 - 18.75) / 0.75 = 1.25 / 0.75 = 1.66</td>
+                  <td style="padding:10px 12px; font-weight:700;">1 class</td>
+                  <td style="padding:10px 12px;">20 / 26 = 76.92% (2 misses = 74.07%)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2>4. How ClassQU Implements These Calculations in Production</h2>
+          <p>
+            It is important to clearly distinguish between mathematical theory and what ClassQU's software actually executes in its source code.
+          </p>
+          <ul>
+            <li>
+              <strong>Exact Data from QUMS:</strong> When you connect your QUMS account, ClassQU queries the authenticated student academic API. It reads the raw attended lectures and total lectures held for each subject directly from the portal.
+            </li>
+            <li>
+              <strong>Official Portal Overall Percentage:</strong> ClassQU prioritizes the university's official overall percentage field (<code>st.TotalPercentage</code>) rather than recalculating an unweighted average, ensuring the numbers on your dashboard exactly mirror the examination cell records.
+            </li>
+            <li>
+              <strong>Zero False Security:</strong> If your percentage displays as 74.8% due to rounding, pure math might suggest 0 extra classes if rounded to 75%. ClassQU explicitly enforces <code>Math.max(1, classesNeeded)</code> so you are never misled into believing you are safe when the official portal marks you below the required threshold.
+            </li>
+            <li>
+              <strong>Personalized Guidance:</strong> For every subject in your dashboard and Telegram summary, ClassQU generates concise guidance indicating whether you are safe (with skippable count) or need attention (with consecutive classes needed).
+            </li>
+          </ul>
+
+          <div class="callout" style="margin-top:28px;">
+            <strong>Need to see your real numbers?</strong> Create an account or sign in to your dashboard to view your live, subject-by-subject attendance pulled directly from your university portal.
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="cta-band">
+      <h2>Stay on Top of Your Attendance</h2>
+      <p>Connect your QUMS account and Telegram to get automatic daily updates and attendance warnings.</p>
+      <div class="cta-actions">
+        <a class="btn btn-lg" href="/register">Get Started Free</a>
+        <a class="btn btn-lg btn-ghost" href="/login">Login</a>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Purely client-side interactive calculator script
+    (() => {
+      const attInput = document.getElementById('inputAttended');
+      const totInput = document.getElementById('inputTotal');
+      const outPct = document.getElementById('outPct');
+      const outStatus = document.getElementById('outStatus');
+      const outAction = document.getElementById('outAction');
+      const outExp = document.getElementById('outExplanation');
+
+      function calculate() {
+        let a = parseInt(attInput.value, 10);
+        let t = parseInt(totInput.value, 10);
+
+        if (isNaN(a) || a < 0) a = 0;
+        if (isNaN(t) || t < 1) t = 1;
+        if (a > t) {
+          attInput.value = t;
+          a = t;
+        }
+
+        const pct = (a / t) * 100;
+        outPct.textContent = pct.toFixed(2) + '%';
+
+        if (pct < 75) {
+          outPct.style.color = '#dc2626';
+          outStatus.textContent = 'Below 75%';
+          outStatus.style.color = '#dc2626';
+          const needed = Math.max(1, Math.ceil((0.75 * t - a) / 0.25));
+          outAction.textContent = `Attend ${needed} more`;
+          outAction.style.color = '#dc2626';
+          outExp.innerHTML = `You have attended <strong>${a}</strong> out of <strong>${t}</strong> classes (${pct.toFixed(2)}%). You must attend <strong>${needed}</strong> consecutive classes without missing any to reach 75.00%.`;
+        } else {
+          outPct.style.color = '#16a34a';
+          outStatus.textContent = 'Safe (≥ 75%)';
+          outStatus.style.color = '#16a34a';
+          const canSkip = Math.max(0, Math.floor((a - 0.75 * t) / 0.75));
+          outAction.textContent = canSkip === 0 ? 'No skips allowed' : `Can miss ${canSkip}`;
+          outAction.style.color = '#16a34a';
+          outExp.innerHTML = canSkip === 0
+            ? `You have attended <strong>${a}</strong> out of <strong>${t}</strong> classes (${pct.toFixed(2)}%). You are at the threshold — any missed class will drop you below 75%.`
+            : `You have attended <strong>${a}</strong> out of <strong>${t}</strong> classes (${pct.toFixed(2)}%). You can miss up to <strong>${canSkip}</strong> classes and still remain at or above 75.00%.`;
+        }
+      }
+
+      attInput.addEventListener('input', calculate);
+      totInput.addEventListener('input', calculate);
+      calculate();
+    })();
+  </script>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand"><span class="dot" aria-hidden="true"></span> ClassQU</div>
+          <p class="footer-tagline">Track. Alert. Stay Updated.</p>
+          <p class="footer-about">
+            ClassQU helps students monitor their QUMS attendance and receive attendance and academic notifications through Telegram.
+          </p>
+        </div>
+        <div class="footer-col">
+          <h3>Guides</h3>
+          <ul>
+            <li><a href="/attendance-calculator-guide">Attendance Calculator</a></li>
+            <li><a href="/qums-troubleshooting">QUMS Troubleshooting</a></li>
+            <li><a href="/telegram-guide">Telegram Notifications</a></li>
+            <li><a href="/security-and-privacy">Data Security Guide</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Product</h3>
+          <ul>
+            <li><a href="/features">Features</a></li>
+            <li><a href="/how-it-works">How It Works</a></li>
+            <li><a href="/faq">FAQ</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Legal</h3>
+          <ul>
+            <li><a href="/privacy">Privacy Policy</a></li>
+            <li><a href="/terms">Terms &amp; Conditions</a></li>
+            <li><a href="/contact">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© <span data-year>2026</span> ClassQU. All rights reserved.</span>
+        <span>Not affiliated with the QUMS portal itself. Data belongs to the student's own QUMS account.</span>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

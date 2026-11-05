@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: qu-class
+    runtime: node
+    plan: free
+    buildCommand: npm install && npx playwright install chromium
+    startCommand: npm start
+    healthCheckPath: /health

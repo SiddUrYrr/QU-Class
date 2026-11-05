@@ -1,0 +1,13 @@
+node_modules/
+session_state.json
+.env
+.env.*
+.DS_Store
+*.log
+debug-*.txt
+*.pem
+test/fixtures/
+
+# Local data & sessions
+data/*
+!data/.gitkeep

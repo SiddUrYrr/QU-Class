@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" role="img" aria-labelledby="title desc">
+  <title id="title">ClassQU</title>
+  <desc id="desc">Bold Q attendance mark with a check</desc>
+  <rect x="7" y="7" width="114" height="114" rx="14" fill="#facc15" stroke="#111827" stroke-width="7"/>
+  <path d="M92 42a37 37 0 1 0-5 47l14 14" fill="none" stroke="#2563eb" stroke-width="14" stroke-linecap="square" stroke-linejoin="miter"/>
+  <path d="m38 64 13 13 29-31" fill="none" stroke="#111827" stroke-width="9" stroke-linecap="square" stroke-linejoin="miter"/>
+  <path d="M89 25h13v13" fill="none" stroke="#111827" stroke-width="7"/>
+</svg>

@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FAQ — ClassQU</title>
+  <meta name="description" content="Frequently asked questions about ClassQU: attendance percentage formulas, QUMS connection, CAPTCHA troubleshooting, Telegram alerts, schedules, and student data privacy." />
+  <meta name="theme-color" content="#1e3a8a" />
+  <meta property="og:site_name" content="ClassQU" />
+  <meta property="og:title" content="FAQ — ClassQU" />
+  <meta property="og:description" content="Answers about QUMS setup, Telegram connection, attendance calculations, notifications, and account security." />
+  <meta property="og:type" content="website" />
+  <link rel="canonical" href="https://qattend.onrender.com/faq" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/style.css" />
+  <script src="/site.js" defer></script>
+</head>
+<body>
+  <header class="nav">
+    <a class="brand brand-link" href="/">
+      <img src="/logo.svg" alt="ClassQU Logo" class="brand-logo" width="24" height="24" />
+      <span>ClassQU</span>
+    </a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="/">Home</a>
+      <a href="/features">Features</a>
+      <a href="/how-it-works">How It Works</a>
+      <a href="/attendance-calculator-guide">Calculator Guide</a>
+      <a href="/about">About</a>
+      <a href="/faq" class="active">FAQ</a>
+      <a href="/contact">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <span class="nav-cta" data-auth-swap>
+        <a class="btn btn-ghost" href="/login">Login</a>
+        <a class="btn" href="/register">Register</a>
+      </span>
+      <button id="navToggle" class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="drawer">☰</button>
+    </div>
+  </header>
+
+  <div id="drawerOverlay" class="drawer-overlay"></div>
+  <aside id="drawer" class="drawer" aria-hidden="true" aria-label="Mobile menu">
+    <div class="drawer-head">ClassQU</div>
+    <nav class="drawer-nav">
+      <a href="/">🏠 Home</a>
+      <a href="/features">✨ Features</a>
+      <a href="/how-it-works">🔄 How It Works</a>
+      <a href="/attendance-calculator-guide">🧮 Calculator Guide</a>
+      <a href="/qums-troubleshooting">🔧 QUMS Troubleshooting</a>
+      <a href="/telegram-guide">💬 Telegram Guide</a>
+      <a href="/security-and-privacy">🔒 Security &amp; Privacy</a>
+      <a href="/about">ℹ️ About</a>
+      <a href="/faq">❓ FAQ</a>
+      <a href="/contact">✉️ Contact</a>
+      <a href="/login">🔑 Login</a>
+      <a href="/register">📝 Register</a>
+    </nav>
+  </aside>
+
+  <main>
+    <section class="page-head">
+      <h1>Frequently Asked Questions</h1>
+      <p class="hero-tagline">Answers. Details. Clarifications.</p>
+      <p style="margin-top:10px;">
+        Clear, comprehensive answers about how ClassQU works, how calculations are performed, how alerts are triggered, and how your privacy is protected.
+      </p>
+    </section>
+
+    <section class="section">
+      <div class="section-inner">
+        <!-- Group 1: General & Attendance Calculations -->
+        <h2 class="section-title-lg">Attendance Tracking &amp; Calculations</h2>
+        <div class="faq-list">
+          <details class="faq-item">
+            <summary>How does ClassQU calculate my attendance percentage?</summary>
+            <p>
+              ClassQU reads your attended and total class counts directly from the QUMS academic portal. The percentage is calculated as <code>(Attended Classes / Total Classes Conducted) * 100</code>. For overall semester attendance, ClassQU directly prioritizes the university portal's official overall percentage field (<code>st.TotalPercentage</code>) to ensure exact fidelity with the examination records.
+            </p>
+          </details>
+          <details class="faq-item">
+            <summary>How are "Classes Needed to Reach 75%" calculated?</summary>
+            <p>
+              When a subject is below 75%, every future attended lecture adds 1 to both your attended count and total count: <code>(Attended + k) / (Total + k) >= 0.75</code>. Solving for <em>k</em> yields <code>k = Math.ceil((0.75 * Total - Attended) / 0.25)</code>. For detailed worked examples and an interactive tool, visit our <a href="/attendance-calculator-guide">Attendance Calculator Guide</a>.
+            </p>
+          </details>
+          <details class="faq-item">
+            <summary>How does the "Margin / Skippable Classes" calculation work?</summary>
+            <p>
+              When your attendance is at or above 75%, ClassQU calculates how many classes you could miss consecutively without dropping below the threshold: <code>k = Math.floor((Attended - 0.75 * Total) / 0.75)</code>. If your attendance is exactly 75% or very close, the margin is 0, indicating any missed class will drop you below the threshold.
+            </p>
+          </details>
+          <details class="faq-item">
+            <summary>Why didn't my attendance percentage change immediately after my class?</summary>
+            <p>
+              ClassQU reflects data as it is recorded on the university portal. Faculty members typically submit attendance records later in the afternoon, in evening batches, or sometimes days later. ClassQU cannot display an attendance mark before the teacher submits it to the portal.
+            </p>
+          </details>
+        </div>
+
+        <!-- Group 2: QUMS Connection & CAPTCHA -->
+        <h2 class="section-title-lg" style="margin-top:36px;">QUMS Connection &amp; Authentication</h2>
+        <div class="faq-list">
+          <details class="faq-item">
+            <summary>Why do I have to solve a CAPTCHA when connecting QUMS?</summary>
+            <p>
+              The university portal requires a visual CAPTCHA verification challenge during student login to prevent automated bot abuse. In compliance with security standards, ClassQU never attempts to bypass or OCR solve the CAPTCHA; a headless browser on our server loads the challenge and relays the real image to your screen for you to solve personally.
+            </p>
+          </details>
+          <details class="faq-item">
+            <summary>What does "ConcurrentLoginError" or 429 status mean?</summary>
+            <p>
+              To maintain system stability and avoid triggering rate limits on university infrastructure, ClassQU allows only 1 active background browser launch per user at a time. If you click "Get Captcha" multiple times in quick succession, wait 20–30 seconds for the existing process to conclude, then click once.
+            </p>
+          </details>
+          <details class="faq-item">
+            <summary>Why did my QUMS session expire, and how do I reconnect?</summary>
+            <p>
+              University portal servers automatically expire active login sessions after multi-day inactivity, weekly maintenance reboots, or cookie timeouts. When this happens, ClassQU alerts you with a <strong>Reconnect</strong> button. Because your QID and encrypted password remain saved, reconnecting does not require re-typing your credentials—you only need to enter the visual CAPTCHA code.
+            </p>
+          </details>
+          <details class="faq-item">
+            <summary>What should I do if I change my password on the university portal?</summary>
+            <p>
+              If you updated your password on the university site, ClassQU's stored encrypted password will no longer work. Navigate to QUMS Setup, click <strong>Reset / Delete QUMS Connection</strong> to permanently erase the old credentials, and then connect using your new password.
+            </p>
+          </details>
+        </div>
+
+        <!-- Group 3: Telegram Notifications & Automation -->
+        <h2 class="section-title-lg" style="margin-top:36px;">Telegram Alerts &amp; Schedules</h2>
+        <div class="faq-list">
+          <details class="faq-item">
+            <summary>What notifications does ClassQU actually send to Telegram?</summary>
+            <p>
+              ClassQU delivers:
+              (1) Daily class timetable every morning at <strong>8:30 AM IST</strong>;
+              (2) Real-time attendance alerts during college hours (08:30–17:00 IST) when a professor marks a lecture;
+              (3) Backdated attendance alerts when records are modified retroactively;
+              (4) New assignment notifications every 30 minutes;
+              (5) Urgent assignment deadline reminders at <strong>7:00 PM IST</strong> for assignments due today; and
+              (6) On-demand attendance summaries whenever requested.
+            </p>
+          </details>
+          <details class="faq-item">
+            <summary>Does ClassQU send an automated summary every night at 9:00 PM?</summary>
+            <p>
+              <strong>No.</strong> ClassQU does not operate an automated nightly summary job. Daily summaries are strictly <strong>manual and on-demand</strong>: clicking "Send Attendance Summary" on your dashboard generates and dispatches the summary immediately to your chat.
+            </p>
+          </details>
+          <details class="faq-item">
+            <summary>How does backdated attendance detection work?</summary>
+            <p>
+              In addition to monitoring today's active classes, ClassQU periodically scans the university's full Month Register. If an instructor marks or amends attendance for an earlier date, ClassQU detects the difference, cites the exact historical class date, and sends an alert.
+            </p>
+          </details>
+          <details class="faq-item">
+            <summary>Can I look up attendance for a past date on Telegram?</summary>
+            <p>
+              Yes! Send any date in <code>DD/MM/YYYY</code> or <code>DD/MM/YY</code> format (for example: <code>14/10/2026</code>) directly to the Telegram bot. It will look up your authenticated records and return a complete period-by-period breakdown for that day.
+            </p>
+          </details>
+          <details class="faq-item">
+            <summary>Why do some Telegram bot messages disappear after 1 or 2 minutes?</summary>
+            <p>
+              ClassQU features an automated message pruning system to keep your personal chat clutter-free. Interactive commands and date queries automatically delete after <strong>60 seconds</strong>, while <code>/status</code> reports delete after <strong>2 minutes</strong>. Important alerts (such as Session Expired notices) remain until resolved.
+            </p>
+          </details>
+          <details class="faq-item">
+            <summary>Can I disconnect Telegram at any time?</summary>
+            <p>
+              Yes. Clicking <strong>Disconnect</strong> in your dashboard or Telegram settings immediately unlinks your chat ID. No further alerts or summaries will be sent until you choose to reconnect.
+            </p>
+          </details>
+        </div>
+
+        <!-- Group 4: Security, Isolation & Account Privacy -->
+        <h2 class="section-title-lg" style="margin-top:36px;">Security, Data Isolation &amp; Privacy</h2>
+        <div class="faq-list">
+          <details class="faq-item">
+            <summary>Is my QUMS university password visible to anyone?</summary>
+            <p>
+              No. Your university password is encrypted using AES-256-GCM before being stored in the database. It is never displayed on dashboard pages, never returned in API payloads, and never sent across Telegram.
+            </p>
+          </details>
+          <details class="faq-item">
+            <summary>Will my academic records ever be sent to another student?</summary>
+            <p>
+              No. ClassQU enforces strict multi-tenant isolation. Every account maintains a private session file, an isolated database record, and an exclusive Telegram chat binding. Notifications address you by your official student name from QUMS—never your email.
+            </p>
+          </details>
+          <details class="faq-item">
+            <summary>How can I delete my data or remove my university connection?</summary>
+            <p>
+              You have full control: clicking <strong>Reset / Delete QUMS Connection</strong> immediately destroys stored credentials and removes active session files from the server. To delete your entire user account, submit a request via our <a href="/contact">Contact page</a>.
+            </p>
+          </details>
+          <details class="faq-item">
+            <summary>Is ClassQU officially affiliated with Quantum University or QUMS?</summary>
+            <p>
+              No. ClassQU is an independent student project created to assist students with timely academic notifications. It is not an official university service and does not claim any certification or institutional affiliation. The official university portal remains the authoritative source of truth.
+            </p>
+          </details>
+        </div>
+
+        <div class="callout" style="margin-top:32px;">
+          <strong>Have another question?</strong> Explore our detailed <a href="/attendance-calculator-guide">Attendance Calculator Guide</a>, <a href="/qums-troubleshooting">QUMS Troubleshooting Guide</a>, or reach out on the <a href="/contact">Contact page</a>.
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-band">
+      <h2>Ready to Get Started?</h2>
+      <p>Create your free account, connect your university portal, and stay effortlessly updated.</p>
+      <div class="cta-actions">
+        <a class="btn btn-lg" href="/register">Create Account</a>
+        <a class="btn btn-lg btn-ghost" href="/login">Login</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand"><span class="dot" aria-hidden="true"></span> ClassQU</div>
+          <p class="footer-tagline">Track. Alert. Stay Updated.</p>
+          <p class="footer-about">
+            ClassQU helps students monitor their QUMS attendance and receive attendance and academic notifications through Telegram.
+          </p>
+        </div>
+        <div class="footer-col">
+          <h3>Guides</h3>
+          <ul>
+            <li><a href="/attendance-calculator-guide">Attendance Calculator</a></li>
+            <li><a href="/qums-troubleshooting">QUMS Troubleshooting</a></li>
+            <li><a href="/telegram-guide">Telegram Notifications</a></li>
+            <li><a href="/security-and-privacy">Data Security Guide</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Product</h3>
+          <ul>
+            <li><a href="/features">Features</a></li>
+            <li><a href="/how-it-works">How It Works</a></li>
+            <li><a href="/faq">FAQ</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Legal</h3>
+          <ul>
+            <li><a href="/privacy">Privacy Policy</a></li>
+            <li><a href="/terms">Terms &amp; Conditions</a></li>
+            <li><a href="/contact">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© <span data-year>2026</span> ClassQU. All rights reserved.</span>
+        <span>Not affiliated with the QUMS portal itself. Data belongs to the student's own QUMS account.</span>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

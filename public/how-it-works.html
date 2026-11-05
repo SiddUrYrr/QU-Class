@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How It Works — ClassQU</title>
+  <meta name="description" content="Discover how ClassQU operates: account setup, headless QUMS portal relay, deep-link Telegram binding, background schedulers, and multi-tenant security." />
+  <meta name="theme-color" content="#1e3a8a" />
+  <meta property="og:site_name" content="ClassQU" />
+  <meta property="og:title" content="How It Works — ClassQU" />
+  <meta property="og:description" content="A transparent, technical explanation of ClassQU's architecture, background schedulers, and automated Telegram alerts." />
+  <meta property="og:type" content="website" />
+  <link rel="canonical" href="https://qattend.onrender.com/how-it-works" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/style.css" />
+  <script src="/site.js" defer></script>
+</head>
+<body>
+  <header class="nav">
+    <a class="brand brand-link" href="/">
+      <img src="/logo.svg" alt="ClassQU Logo" class="brand-logo" width="24" height="24" />
+      <span>ClassQU</span>
+    </a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="/">Home</a>
+      <a href="/features">Features</a>
+      <a href="/how-it-works" class="active">How It Works</a>
+      <a href="/attendance-calculator-guide">Calculator Guide</a>
+      <a href="/about">About</a>
+      <a href="/faq">FAQ</a>
+      <a href="/contact">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <span class="nav-cta" data-auth-swap>
+        <a class="btn btn-ghost" href="/login">Login</a>
+        <a class="btn" href="/register">Register</a>
+      </span>
+      <button id="navToggle" class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="drawer">☰</button>
+    </div>
+  </header>
+
+  <div id="drawerOverlay" class="drawer-overlay"></div>
+  <aside id="drawer" class="drawer" aria-hidden="true" aria-label="Mobile menu">
+    <div class="drawer-head">ClassQU</div>
+    <nav class="drawer-nav">
+      <a href="/">🏠 Home</a>
+      <a href="/features">✨ Features</a>
+      <a href="/how-it-works">🔄 How It Works</a>
+      <a href="/attendance-calculator-guide">🧮 Calculator Guide</a>
+      <a href="/qums-troubleshooting">🔧 QUMS Troubleshooting</a>
+      <a href="/telegram-guide">💬 Telegram Guide</a>
+      <a href="/security-and-privacy">🔒 Security &amp; Privacy</a>
+      <a href="/about">ℹ️ About</a>
+      <a href="/faq">❓ FAQ</a>
+      <a href="/contact">✉️ Contact</a>
+      <a href="/login">🔑 Login</a>
+      <a href="/register">📝 Register</a>
+    </nav>
+  </aside>
+
+  <main>
+    <section class="page-head">
+      <h1>How ClassQU Works</h1>
+      <p class="hero-tagline">Connect. Monitor. Automate.</p>
+      <p style="margin-top:10px;">
+        An open, transparent look under the hood: from initial setup to headless browser relays, state deduplication, and automated background workers.
+      </p>
+    </section>
+
+    <section class="section">
+      <div class="section-inner">
+        <article class="prose">
+          <h2>1. The Four-Stage Connection Lifecycle</h2>
+          <p>
+            ClassQU is designed to be set up once. After initial configuration, the system monitors your academic records on the server 24/7 without requiring you to keep a browser tab open or repeatedly log into the university portal.
+          </p>
+
+          <div class="steps-grid" style="margin:24px 0;">
+            <div class="step-card">
+              <div class="step-num" aria-hidden="true">1</div>
+              <h3>User Registration</h3>
+              <p>You create an account with your email. Authentication, token verification, and password resets are handled via Google native email/password authentication.</p>
+            </div>
+            <div class="step-card">
+              <div class="step-num" aria-hidden="true">2</div>
+              <h3>Headless QUMS Link</h3>
+              <p>You provide your QID and university password once. A headless browser session relays the official visual CAPTCHA for you to solve.</p>
+            </div>
+            <div class="step-card">
+              <div class="step-num" aria-hidden="true">3</div>
+              <h3>Telegram Deep Linking</h3>
+              <p>A single click generates a secure Telegram deep link. Pressing "Start" permanently pairs your specific Telegram chat ID with your ClassQU account.</p>
+            </div>
+            <div class="step-card">
+              <div class="step-num" aria-hidden="true">4</div>
+              <h3>Continuous Monitoring</h3>
+              <p>Background workers track daily timetables, live lecture marks, retroactively entered attendance, and assignment deadlines automatically.</p>
+            </div>
+          </div>
+
+          <h2>2. The Headless Browser Relay Explained</h2>
+          <p>
+            Universities protect student portals with dynamic security tokens and visual CAPTCHA challenges. ClassQU bridges this securely using Playwright Chromium running in headless mode:
+          </p>
+          <ul>
+            <li><strong>Initialization:</strong> When you enter your credentials on the setup screen, the backend spins up an isolated Chromium context that navigates directly to the university's official portal.</li>
+            <li><strong>Visual Relay:</strong> The portal's CAPTCHA element is screenshotted and streamed as a base64 image directly to your browser. ClassQU never uses automated OCR or third-party cracking services; you solve the CAPTCHA personally.</li>
+            <li><strong>Session Extraction:</strong> Once authenticated, the browser extracts the necessary session cookies and writes them to an isolated, user-specific JSON file (<code>mode 0600</code>). The browser process is then cleanly terminated to preserve server resources.</li>
+            <li><strong>Encrypted Reconnection:</strong> Your university password is encrypted with <strong>AES-256-GCM</strong> using a unique initialization vector. If your portal session expires, you do not need to retype your password—clicking "Reconnect" auto-fills your credentials, requiring only the fresh CAPTCHA code.</li>
+          </ul>
+
+          <p style="margin-top:10px;">
+            <a href="/qums-troubleshooting" style="font-weight:600; color:var(--navy-2,#1e3a8a);">Learn more in our QUMS Connection &amp; Troubleshooting Guide →</a>
+          </p>
+
+          <h2>3. Background Worker Architecture</h2>
+          <p>
+            ClassQU runs several specialized background scheduler and watcher loops, each dedicated to a distinct academic monitoring responsibility:
+          </p>
+
+          <div style="overflow-x:auto;">
+            <table style="width:100%; border-collapse:collapse; margin:16px 0; font-size:0.88rem; text-align:left;">
+              <thead>
+                <tr style="background:#f8fafc; border-bottom:2px solid #cbd5e1;">
+                  <th style="padding:10px 12px;">Monitoring Loop</th>
+                  <th style="padding:10px 12px;">Schedule / Interval</th>
+                  <th style="padding:10px 12px;">Data Source</th>
+                  <th style="padding:10px 12px;">Purpose &amp; Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom:1px solid #e2e8f0;">
+                  <td style="padding:10px 12px; font-weight:700;">Morning Scheduler</td>
+                  <td style="padding:10px 12px;">Every morning at <strong>8:30 AM IST</strong></td>
+                  <td style="padding:10px 12px;">Timetable API</td>
+                  <td style="padding:10px 12px;">Extracts today's lectures, matches room numbers and faculty, and pushes the morning schedule.</td>
+                </tr>
+                <tr style="border-bottom:1px solid #e2e8f0;">
+                  <td style="padding:10px 12px; font-weight:700;">Live Attendance Watcher</td>
+                  <td style="padding:10px 12px;">Every <strong>5 minutes</strong> (08:30–17:00 IST)</td>
+                  <td style="padding:10px 12px;">Daily Periods API</td>
+                  <td style="padding:10px 12px;">Detects when lectures transition from Not Marked to Present or Absent; alerts user instantly.</td>
+                </tr>
+                <tr style="border-bottom:1px solid #e2e8f0;">
+                  <td style="padding:10px 12px; font-weight:700;">Month Register Scanner</td>
+                  <td style="padding:10px 12px;">Every <strong>10 minutes</strong></td>
+                  <td style="padding:10px 12px;">Month Register API</td>
+                  <td style="padding:10px 12px;">Identifies retroactively updated records for past dates and notifies user with the real lecture date.</td>
+                </tr>
+                <tr style="border-bottom:1px solid #e2e8f0;">
+                  <td style="padding:10px 12px; font-weight:700;">Assignment Scanner</td>
+                  <td style="padding:10px 12px;">Every <strong>30 minutes</strong></td>
+                  <td style="padding:10px 12px;">Student Assignment API</td>
+                  <td style="padding:10px 12px;">Identifies new teacher-published assignments and alerts user with topic details and deadlines.</td>
+                </tr>
+                <tr style="border-bottom:1px solid #e2e8f0;">
+                  <td style="padding:10px 12px; font-weight:700;">Deadline Reminder</td>
+                  <td style="padding:10px 12px;">Every evening at <strong>7:00 PM IST</strong></td>
+                  <td style="padding:10px 12px;">Known Assignments DB</td>
+                  <td style="padding:10px 12px;">Warns students if an assignment deadline expires today so work is submitted in time.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2>4. Deduplication &amp; False-Positive Elimination</h2>
+          <p>
+            A common failure of automated scrapers is alert duplication—bombarding users with repeated notifications whenever a script restarts. ClassQU implements strict idempotency contracts:
+          </p>
+          <ul>
+            <li><strong>State Marked Before Send:</strong> When an event is detected, its composite key (combining user ID, course code, period, and status) is recorded in PostgreSQL or persistent JSON storage <em>before</em> dispatching to Telegram, with automatic rollback if transmission fails.</li>
+            <li><strong>Zero Duplicate Alerts on Boot:</strong> On application deployment or server reboot, historical records are seeded silently as baseline state without triggering duplicate alert storms.</li>
+            <li><strong>Cross-Loop Filtering:</strong> Marks detected by the 5-minute fast loop during daytime hours are automatically deduplicated against the 10-minute month loop, guaranteeing single delivery.</li>
+          </ul>
+
+          <h2>5. Safe Session Lifecycle &amp; Reconnection</h2>
+          <p>
+            If the university server restarts, cookies may expire. ClassQU handles this gracefully:
+          </p>
+          <ol>
+            <li>If an authenticated request returns a session rejection, ClassQU flags the user status as <code>expired</code>.</li>
+            <li>An immediate alert arrives in your Telegram chat with a direct <strong>🔐 Reconnect QUMS</strong> button.</li>
+            <li>Clicking reconnect opens the QUMS setup screen with your QID and decrypted password already populated.</li>
+            <li>You solve the fresh CAPTCHA, and active tracking resumes instantaneously.</li>
+          </ol>
+        </article>
+      </div>
+    </section>
+
+    <section class="cta-band">
+      <h2>Experience Automated Attendance Tracking</h2>
+      <p>Join students who stay effortlessly updated on their classes, attendance marks, and deadlines.</p>
+      <div class="cta-actions">
+        <a class="btn btn-lg" href="/register">Create Free Account</a>
+        <a class="btn btn-lg btn-ghost" href="/login">Login</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand"><span class="dot" aria-hidden="true"></span> ClassQU</div>
+          <p class="footer-tagline">Track. Alert. Stay Updated.</p>
+          <p class="footer-about">
+            ClassQU helps students monitor their QUMS attendance and receive attendance and academic notifications through Telegram.
+          </p>
+        </div>
+        <div class="footer-col">
+          <h3>Guides</h3>
+          <ul>
+            <li><a href="/attendance-calculator-guide">Attendance Calculator</a></li>
+            <li><a href="/qums-troubleshooting">QUMS Troubleshooting</a></li>
+            <li><a href="/telegram-guide">Telegram Notifications</a></li>
+            <li><a href="/security-and-privacy">Data Security Guide</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Product</h3>
+          <ul>
+            <li><a href="/features">Features</a></li>
+            <li><a href="/how-it-works">How It Works</a></li>
+            <li><a href="/faq">FAQ</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Legal</h3>
+          <ul>
+            <li><a href="/privacy">Privacy Policy</a></li>
+            <li><a href="/terms">Terms &amp; Conditions</a></li>
+            <li><a href="/contact">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© <span data-year>2026</span> ClassQU. All rights reserved.</span>
+        <span>Not affiliated with the QUMS portal itself. Data belongs to the student's own QUMS account.</span>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

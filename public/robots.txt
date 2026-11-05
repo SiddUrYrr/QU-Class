@@ -1,0 +1,18 @@
+# ClassQU — public site
+# Google AdSense crawlers explicitly allowed
+
+
+# Public information pages are crawlable. API endpoints, authenticated pages,
+# admin pages, and logout action are disallowed.
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /dashboard
+Disallow: /qums-setup
+Disallow: /telegram-setup
+Disallow: /admin
+Disallow: /logout
+Disallow: /reset
+
+Sitemap: https://qattend.onrender.com/sitemap.xml
+

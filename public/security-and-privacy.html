@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Data Security, Architecture &amp; Privacy Guide — ClassQU</title>
+  <meta name="description" content="An in-depth explanation of ClassQU's security architecture: AES-256-GCM encryption, native email/password authentication, session isolation, and data deletion practices." />
+  <meta name="theme-color" content="#1e3a8a" />
+  <meta property="og:site_name" content="ClassQU" />
+  <meta property="og:title" content="Data Security, Architecture &amp; Privacy Guide — ClassQU" />
+  <meta property="og:description" content="Detailed overview of how student credentials, session files, and academic data are encrypted, isolated, and protected in ClassQU." />
+  <meta property="og:type" content="article" />
+  <link rel="canonical" href="https://qattend.onrender.com/security-and-privacy" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/style.css" />
+  <script src="/site.js" defer></script>
+</head>
+<body>
+  <header class="nav">
+    <a class="brand brand-link" href="/">
+      <img src="/logo.svg" alt="ClassQU Logo" class="brand-logo" width="24" height="24" />
+      <span>ClassQU</span>
+    </a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="/">Home</a>
+      <a href="/features">Features</a>
+      <a href="/how-it-works">How It Works</a>
+      <a href="/security-and-privacy" class="active">Security Guide</a>
+      <a href="/about">About</a>
+      <a href="/faq">FAQ</a>
+      <a href="/contact">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <span class="nav-cta" data-auth-swap>
+        <a class="btn btn-ghost" href="/login">Login</a>
+        <a class="btn" href="/register">Register</a>
+      </span>
+      <button id="navToggle" class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="drawer">☰</button>
+    </div>
+  </header>
+
+  <div id="drawerOverlay" class="drawer-overlay"></div>
+  <aside id="drawer" class="drawer" aria-hidden="true" aria-label="Mobile menu">
+    <div class="drawer-head">ClassQU</div>
+    <nav class="drawer-nav">
+      <a href="/">🏠 Home</a>
+      <a href="/features">✨ Features</a>
+      <a href="/how-it-works">🔄 How It Works</a>
+      <a href="/attendance-calculator-guide">🧮 Calculator Guide</a>
+      <a href="/qums-troubleshooting">🔧 QUMS Troubleshooting</a>
+      <a href="/telegram-guide">💬 Telegram Guide</a>
+      <a href="/security-and-privacy">🔒 Security &amp; Privacy</a>
+      <a href="/about">ℹ️ About</a>
+      <a href="/faq">❓ FAQ</a>
+      <a href="/contact">✉️ Contact</a>
+      <a href="/login">🔑 Login</a>
+      <a href="/register">📝 Register</a>
+    </nav>
+  </aside>
+
+  <main>
+    <section class="page-head">
+      <h1>Data Security &amp; Architecture Guide</h1>
+      <p class="hero-tagline">Encrypted. Isolated. Transparent.</p>
+      <p style="margin-top:10px;">
+        A technical overview of how ClassQU protects student credentials, enforces multi-user isolation, and handles data retention and deletion.
+      </p>
+    </section>
+
+    <section class="section">
+      <div class="section-inner">
+        <article class="prose">
+          <h2>1. Core Security Architecture</h2>
+          <p>
+            ClassQU is engineered specifically for university students, with privacy and security principles embedded directly into its system architecture. We operate on the principle of least privilege and strict data isolation.
+          </p>
+
+          <div style="background:#f8fafc; border:1px solid #cbd5e1; border-radius:12px; padding:20px; margin:20px 0;">
+            <h3 style="margin-top:0; color:var(--navy,#0f172a);">Architectural Security Highlights</h3>
+            <ul style="margin-bottom:0;">
+              <li><strong>Zero Credential Sharing:</strong> Your credentials are never shared with or accessible to third parties, other students, or public pages.</li>
+              <li><strong>AES-256-GCM Encryption:</strong> Passwords stored for background re-authentication are encrypted using authenticated cryptography.</li>
+              <li><strong>native email/password authentication:</strong> Industry-standard user identity handling and password management powered by ClassQU.</li>
+              <li><strong>Strict Multi-Tenant Isolation:</strong> Every student account has isolated database entries, session files, and notification states.</li>
+            </ul>
+          </div>
+
+          <h2>2. native email/password authentication &amp; User Identity</h2>
+          <p>
+            To avoid vulnerabilities associated with self-managed password storage, ClassQU integrates directly with Google native email/password authentication:
+          </p>
+          <ul>
+            <li>
+              <strong>Credential Protection:</strong> When you register or change your ClassQU password, the credentials are processed and stored securely by native email/password authentication.
+            </li>
+            <li>
+              <strong>Token Verification:</strong> The ClassQU application server receives cryptographically signed identity tokens (JWTs) and verifies them against official Google public certificates.
+            </li>
+            <li>
+              <strong>No Plaintext Passwords:</strong> ClassQU never writes student account passwords to application logs, persistent disk files, or unencrypted database columns.
+            </li>
+          </ul>
+
+          <h2>3. QUMS Credential Encryption (AES-256-GCM)</h2>
+          <p>
+            To provide continuous attendance tracking, daily 8:30 AM schedules, and 7:00 PM assignment reminders, ClassQU must occasionally re-establish an authenticated session with the university portal when previous session cookies expire.
+          </p>
+          <p>
+            To do this safely without exposing student passwords:
+          </p>
+          <ul>
+            <li>
+              <strong>Authenticated Encryption:</strong> Passwords are encrypted using <strong>AES-256-GCM</strong> (Advanced Encryption Standard in Galois/Counter Mode), which provides both confidentiality and tamper detection.
+            </li>
+            <li>
+              <strong>Key Derivation via Scrypt:</strong> A 256-bit cryptographic key is derived using the memory-hard <code>scrypt</code> key derivation function combined with an isolated salt and an environment secret (<code>ENCRYPTION_KEY</code>).
+            </li>
+            <li>
+              <strong>Unique Initialization Vector (IV):</strong> A fresh, cryptographically random 12-byte initialization vector is generated for every encryption operation. No two stored records share the same ciphertext representation.
+            </li>
+            <li>
+              <strong>16-Byte Authentication Tag:</strong> Every encrypted payload includes a 16-byte GCM authentication tag. If any byte of the ciphertext is altered, decryption immediately fails rather than returning corrupted or vulnerable data.
+            </li>
+          </ul>
+
+          <h2>4. Multi-Tenant Session &amp; Storage Isolation</h2>
+          <p>
+            Each user's environment in ClassQU is completely partitioned:
+          </p>
+          <ul>
+            <li>
+              <strong>Session File Protection:</strong> QUMS session files are stored under <code>data/qums-sessions/&lt;userId&gt;.json</code>. These files are saved with strict <code>0600</code> permissions (read and write access granted exclusively to the operating system process owner).
+            </li>
+            <li>
+              <strong>Database Row Isolation:</strong> In the database, attendance tracking state (<code>known_attendance</code>), assignment records (<code>known_assignments</code>), and Telegram links are scoped strictly by foreign key to your specific user ID.
+            </li>
+            <li>
+              <strong>Telegram Channel Boundary:</strong> Exactly one Telegram chat ID maps to one student. When notifications are pushed, the message builder addresses you by your real student name retrieved from QUMS—never your email address.
+            </li>
+          </ul>
+
+          <h2>5. Web Application Hardening</h2>
+          <p>
+            The web dashboard and API endpoints incorporate multiple layers of defensive engineering:
+          </p>
+          <ul>
+            <li>
+              <strong>Secure HTTP Cookies:</strong> Browser session cookies are configured with <code>httpOnly: true</code> (preventing client-side JavaScript access and XSS theft), <code>sameSite: 'lax'</code> (protecting against Cross-Site Request Forgery), and <code>secure: true</code> in production environments (ensuring cookies are transmitted only over encrypted HTTPS).
+            </li>
+            <li>
+              <strong>Rate Limiting:</strong> Sensitive authentication routes—including login, registration, password reset, and token verification—are protected by dedicated in-memory rate limiters to block brute-force password guessing and resource abuse.
+            </li>
+            <li>
+              <strong>Private Route Exclusion:</strong> Private dashboards (<code>/dashboard</code>), setup pages (<code>/qums-setup</code>, <code>/telegram-setup</code>), administration portals (<code>/admin</code>), and API endpoints (<code>/api/</code>) are protected by mandatory session middleware and are strictly disallowed from public indexing in <code>robots.txt</code>.
+            </li>
+          </ul>
+
+          <h2>6. User Control &amp; Data Deletion Practices</h2>
+          <p>
+            You maintain full sovereignty over your information at all times:
+          </p>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:16px; margin:20px 0;">
+            <div style="background:#fff; border:1px solid #e2e8f0; border-radius:10px; padding:16px; box-shadow:var(--shadow);">
+              <h4 style="margin:0 0 6px; color:#0f172a;">Reset QUMS Connection</h4>
+              <p style="margin:0; font-size:0.86rem; color:#475569;">
+                The <strong>Reset / Delete QUMS Connection</strong> button on the setup screen immediately and permanently purges your saved credentials and active session files from the server.
+              </p>
+            </div>
+            <div style="background:#fff; border:1px solid #e2e8f0; border-radius:10px; padding:16px; box-shadow:var(--shadow);">
+              <h4 style="margin:0 0 6px; color:#0f172a;">Disconnect Telegram</h4>
+              <p style="margin:0; font-size:0.86rem; color:#475569;">
+                Clicking <strong>Disconnect</strong> instantly unlinks your Telegram chat ID. No further automated alerts or summaries can be sent to your chat.
+              </p>
+            </div>
+            <div style="background:#fff; border:1px solid #e2e8f0; border-radius:10px; padding:16px; box-shadow:var(--shadow);">
+              <h4 style="margin:0 0 6px; color:#0f172a;">Full Account Deletion</h4>
+              <p style="margin:0; font-size:0.86rem; color:#475569;">
+                You can request complete deletion of your account, authentication links, and all stored data by contacting us via the <a href="/contact">Contact page</a>.
+              </p>
+            </div>
+          </div>
+
+          <div class="callout warn" style="margin-top:24px;">
+            <strong>Independent Project Notice:</strong> ClassQU is an independent student project and is not an official university service, certified partner, or representative of Quantum University. Always consider the university portal as the authoritative academic record.
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="cta-band">
+      <h2>Experience Private, Reliable Attendance Tracking</h2>
+      <p>Create your free account today and stay informed about your attendance without compromising on security.</p>
+      <div class="cta-actions">
+        <a class="btn btn-lg" href="/register">Create Free Account</a>
+        <a class="btn btn-lg btn-ghost" href="/login">Login</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand"><span class="dot" aria-hidden="true"></span> ClassQU</div>
+          <p class="footer-tagline">Track. Alert. Stay Updated.</p>
+          <p class="footer-about">
+            ClassQU helps students monitor their QUMS attendance and receive attendance and academic notifications through Telegram.
+          </p>
+        </div>
+        <div class="footer-col">
+          <h3>Guides</h3>
+          <ul>
+            <li><a href="/attendance-calculator-guide">Attendance Calculator</a></li>
+            <li><a href="/qums-troubleshooting">QUMS Troubleshooting</a></li>
+            <li><a href="/telegram-guide">Telegram Notifications</a></li>
+            <li><a href="/security-and-privacy">Data Security Guide</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Product</h3>
+          <ul>
+            <li><a href="/features">Features</a></li>
+            <li><a href="/how-it-works">How It Works</a></li>
+            <li><a href="/faq">FAQ</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Legal</h3>
+          <ul>
+            <li><a href="/privacy">Privacy Policy</a></li>
+            <li><a href="/terms">Terms &amp; Conditions</a></li>
+            <li><a href="/contact">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© <span data-year>2026</span> ClassQU. All rights reserved.</span>
+        <span>Not affiliated with the QUMS portal itself. Data belongs to the student's own QUMS account.</span>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

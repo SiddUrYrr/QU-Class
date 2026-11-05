@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Reset password - ClassQU</title><link rel="stylesheet" href="/style.css">
+</head>
+<body><main class="auth-bg"><section class="auth-card">
+  <div class="auth-brand">ClassQU</div>
+  <p class="auth-tagline">Smart University Attendance Monitor</p>
+  <h1>Set a new password</h1>
+  <form id="reset-form">
+    <label class="form-label" for="password">New password</label>
+    <input class="form-input" id="password" type="password" minlength="10" autocomplete="new-password" required>
+    <label class="form-label" for="confirmPassword">Confirm password</label>
+    <input class="form-input" id="confirmPassword" type="password" minlength="10" autocomplete="new-password" required>
+    <div id="message" class="form-error hidden" role="alert"></div>
+    <button id="submit" type="submit" style="width:100%;margin-top:18px">Reset password</button>
+  </form>
+  <p class="auth-foot"><a href="/login">Return to login</a></p>
+</section></main>
+<script>
+const token = new URLSearchParams(location.search).get('token') || '';
+const form = document.getElementById('reset-form');
+const message = document.getElementById('message');
+function show(text) { message.textContent = text; message.classList.remove('hidden'); }
+fetch('/api/reset/validate?token=' + encodeURIComponent(token)).then(r => r.json()).then(data => {
+  if (!data.valid) { show('This reset link is invalid or expired.'); form.querySelector('button').disabled = true; }
+}).catch(() => show('Could not validate this reset link.'));
+form.addEventListener('submit', async (event) => {
+  event.preventDefault(); message.classList.add('hidden');
+  const response = await fetch('/api/reset', { method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ token, password: document.getElementById('password').value, confirmPassword: document.getElementById('confirmPassword').value }) });
+  const data = await response.json();
+  if (!response.ok) return show(data.error || 'Could not reset your password.');
+  location.replace(data.redirect || '/login');
+});
+</script><footer class="site-footer"><div class="footer-inner"><div class="footer-bottom"><span>© <span data-year>2026</span> ClassQU — Track. Alert. Stay Updated.</span><span><a href="/contact">Contact</a> · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a></span></div></div></footer></body></html>

@@ -1,0 +1,10 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Forgot password - ClassQU</title><link rel="stylesheet" href="/style.css"></head>
+<body><main class="auth-bg"><section class="auth-card"><div class="auth-brand">ClassQU</div><p class="auth-tagline">Smart University Attendance Monitor</p>
+<h1>Reset your password</h1><p class="sub">Enter your email. If an account exists, we will send a reset link.</p>
+<form id="form"><label class="form-label" for="email">Email</label><input class="form-input" id="email" type="email" required><div id="message" class="form-ok hidden"></div><div id="error" class="form-error hidden"></div><button id="submit" type="submit" style="width:100%;margin-top:18px">Send reset link</button></form>
+<p class="auth-foot"><a href="/login">Return to login</a></p></section></main><script>
+const form=document.getElementById('form'),message=document.getElementById('message'),error=document.getElementById('error');
+form.addEventListener('submit',async e=>{e.preventDefault();error.classList.add('hidden');message.classList.add('hidden');const b=document.getElementById('submit');b.disabled=true;
+const r=await fetch('/api/forgot',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:email.value})});const d=await r.json();
+if(!r.ok){error.textContent=d.error||'Could not send reset link.';error.classList.remove('hidden');b.disabled=false;return}message.textContent=d.message+(d.developmentResetUrl?' Development link: '+d.developmentResetUrl:'');message.classList.remove('hidden');b.disabled=false;});
+</script><footer class="site-footer"><div class="footer-inner"><div class="footer-bottom"><span>© <span data-year>2026</span> ClassQU — Track. Alert. Stay Updated.</span><span><a href="/contact">Contact</a> · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a></span></div></div></footer></body></html>

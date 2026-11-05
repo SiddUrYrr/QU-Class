@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QUMS Connection &amp; CAPTCHA Troubleshooting Guide — ClassQU</title>
+  <meta name="description" content="Step-by-step guide to connecting QUMS to ClassQU, understanding headless CAPTCHA relay, and troubleshooting session expiry, login errors, and password changes." />
+  <meta name="theme-color" content="#1e3a8a" />
+  <meta property="og:site_name" content="ClassQU" />
+  <meta property="og:title" content="QUMS Connection &amp; CAPTCHA Troubleshooting Guide — ClassQU" />
+  <meta property="og:description" content="Learn how ClassQU connects to QUMS, how CAPTCHA verification works, and how to resolve common login errors and session expirations." />
+  <meta property="og:type" content="article" />
+  <link rel="canonical" href="https://qattend.onrender.com/qums-troubleshooting" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/style.css" />
+  <script src="/site.js" defer></script>
+</head>
+<body>
+  <header class="nav">
+    <a class="brand brand-link" href="/">
+      <img src="/logo.svg" alt="ClassQU Logo" class="brand-logo" width="24" height="24" />
+      <span>ClassQU</span>
+    </a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="/">Home</a>
+      <a href="/features">Features</a>
+      <a href="/how-it-works">How It Works</a>
+      <a href="/qums-troubleshooting" class="active">QUMS Troubleshooting</a>
+      <a href="/about">About</a>
+      <a href="/faq">FAQ</a>
+      <a href="/contact">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <span class="nav-cta" data-auth-swap>
+        <a class="btn btn-ghost" href="/login">Login</a>
+        <a class="btn" href="/register">Register</a>
+      </span>
+      <button id="navToggle" class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="drawer">☰</button>
+    </div>
+  </header>
+
+  <div id="drawerOverlay" class="drawer-overlay"></div>
+  <aside id="drawer" class="drawer" aria-hidden="true" aria-label="Mobile menu">
+    <div class="drawer-head">ClassQU</div>
+    <nav class="drawer-nav">
+      <a href="/">🏠 Home</a>
+      <a href="/features">✨ Features</a>
+      <a href="/how-it-works">🔄 How It Works</a>
+      <a href="/attendance-calculator-guide">🧮 Calculator Guide</a>
+      <a href="/qums-troubleshooting">🔧 QUMS Troubleshooting</a>
+      <a href="/telegram-guide">💬 Telegram Guide</a>
+      <a href="/security-and-privacy">🔒 Security &amp; Privacy</a>
+      <a href="/about">ℹ️ About</a>
+      <a href="/faq">❓ FAQ</a>
+      <a href="/contact">✉️ Contact</a>
+      <a href="/login">🔑 Login</a>
+      <a href="/register">📝 Register</a>
+    </nav>
+  </aside>
+
+  <main>
+    <section class="page-head">
+      <h1>QUMS Connection &amp; Troubleshooting Guide</h1>
+      <p class="hero-tagline">Setup. Authenticate. Resolve Issues.</p>
+      <p style="margin-top:10px;">
+        Everything you need to know about linking your university portal, solving login CAPTCHAs, and resolving common session errors.
+      </p>
+    </section>
+
+    <section class="section">
+      <div class="section-inner">
+        <article class="prose">
+          <h2>1. Understanding the QUMS Connection Architecture</h2>
+          <p>
+            QUMS (Quantum University Management System) is the authoritative student portal where academic attendance, lecture timetables, and assignments are recorded.
+          </p>
+          <p>
+            ClassQU operates as a secure companion application to the portal. Rather than storing your password in plain text or using fragile screen scraping, ClassQU implements a robust, headless browser relay:
+          </p>
+          <ul>
+            <li>
+              <strong>Headless Chromium Engine:</strong> When you initiate a connection, an isolated headless Chromium instance launches in the background and loads the official university login portal.
+            </li>
+            <li>
+              <strong>Visual Human CAPTCHA Relay:</strong> The portal requires a visual security CAPTCHA. ClassQU captures a real-time screenshot of the official CAPTCHA and displays it directly to you.
+            </li>
+            <li>
+              <strong>No Automated Bypass:</strong> In strict compliance with security standards, ClassQU never attempts to crack, OCR, or bypass the university's CAPTCHA. The student solves the challenge personally.
+            </li>
+            <li>
+              <strong>Encrypted Session Storage:</strong> Upon successful login, the authenticated session cookies are saved to an isolated session file on disk with strict <code>0600</code> (owner-only) permissions, and your password is encrypted using AES-256-GCM.
+            </li>
+          </ul>
+
+          <h2>2. Step-by-Step Connection Walkthrough</h2>
+          <div class="step-card" style="margin:16px 0;">
+            <div class="step-num" aria-hidden="true">1</div>
+            <h3>Open QUMS Setup</h3>
+            <p>From your ClassQU dashboard, navigate to <strong>QUMS Setup</strong>. Make sure you are signed in to your ClassQU account.</p>
+          </div>
+          <div class="step-card" style="margin:16px 0;">
+            <div class="step-num" aria-hidden="true">2</div>
+            <h3>Enter QID and University Password</h3>
+            <p>Enter your student Registration ID (QID) and your current university portal password. Double-check for typos.</p>
+          </div>
+          <div class="step-card" style="margin:16px 0;">
+            <div class="step-num" aria-hidden="true">3</div>
+            <h3>Fetch and Solve the CAPTCHA</h3>
+            <p>Click <strong>Get Captcha</strong>. Within 2–4 seconds, the portal's security image will load. Type the exact characters displayed in the box.</p>
+          </div>
+          <div class="step-card" style="margin:16px 0;">
+            <div class="step-num" aria-hidden="true">4</div>
+            <h3>Submit and Confirm</h3>
+            <p>Click <strong>Submit Captcha &amp; Login</strong>. Once authenticated, your subjects and timetable will load onto your dashboard automatically.</p>
+          </div>
+
+          <h2>3. Troubleshooting Common Login &amp; Session Issues</h2>
+
+          <div style="background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:20px; margin:20px 0; box-shadow:var(--shadow);">
+            <h3 style="margin-top:0; color:#dc2626;">Issue 1: "Another QUMS reconnect or login is already in progress" (429 Error)</h3>
+            <p><strong>Cause:</strong> To ensure server stability and avoid triggering rate limits on the university network, ClassQU enforces a strict concurrency limit of 1 active browser launch per user at a time.</p>
+            <p><strong>Solution:</strong> Wait approximately 20 to 30 seconds for the existing background process to conclude or automatically terminate, then click "Get Captcha" once more.</p>
+          </div>
+
+          <div style="background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:20px; margin:20px 0; box-shadow:var(--shadow);">
+            <h3 style="margin-top:0; color:#d97706;">Issue 2: Expired CAPTCHA / Timeout</h3>
+            <p><strong>Cause:</strong> The university portal invalidates pending CAPTCHA challenges after 5 minutes (<code>PENDING_TTL_MS = 5 * 60 * 1000</code>). If you leave the setup screen open without submitting, the token expires.</p>
+            <p><strong>Solution:</strong> Do not pause on the CAPTCHA screen. If you were delayed, click <strong>Reload Captcha</strong> to refresh the session token before submitting.</p>
+          </div>
+
+          <div style="background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:20px; margin:20px 0; box-shadow:var(--shadow);">
+            <h3 style="margin-top:0; color:#2563eb;">Issue 3: Ambiguous or Distorted Characters</h3>
+            <p><strong>Cause:</strong> The university CAPTCHA generator occasionally produces overlapping letters or ambiguous glyphs (such as uppercase 'O' versus numeral '0', or lowercase 'l' versus numeral '1').</p>
+            <p><strong>Solution:</strong> If any character looks unclear, do not guess. Click <strong>Reload Captcha</strong> to generate a cleaner, more legible verification image immediately.</p>
+          </div>
+
+          <div style="background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:20px; margin:20px 0; box-shadow:var(--shadow);">
+            <h3 style="margin-top:0; color:#7c3aed;">Issue 4: Periodic Session Expiry ("SessionExpiredError")</h3>
+            <p><strong>Cause:</strong> University portal sessions are not permanent; the university's web servers expire session cookies after multi-day inactivity, system maintenance, or portal reboots.</p>
+            <p><strong>Solution:</strong> When your session expires, ClassQU detects the rejection during background checks and sends a notification with a <strong>Reconnect</strong> button. Because your QID and encrypted password remain saved, clicking "Reconnect" auto-fills your credentials—you only need to enter the visual CAPTCHA to restore your active tracking!</p>
+          </div>
+
+          <div style="background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:20px; margin:20px 0; box-shadow:var(--shadow);">
+            <h3 style="margin-top:0; color:#0f172a;">Issue 5: Password Changed on the University Portal</h3>
+            <p><strong>Cause:</strong> If you reset or updated your password directly on the university portal, ClassQU's stored encrypted password will fail to authenticate.</p>
+            <p><strong>Solution:</strong> On the QUMS Setup page, click <strong>Reset / Delete QUMS Connection</strong>. This completely wipes the stored credentials from the database. Then, simply connect again using your new password.</p>
+          </div>
+
+          <h2>4. Security Best Practices</h2>
+          <ul class="check-list">
+            <li><strong>Never share your password:</strong> No administrator or support personnel from ClassQU will ever request your university password.</li>
+            <li><strong>No password exposure:</strong> Your password is never rendered on dashboard HTML or sent in Telegram messages.</li>
+            <li><strong>Session isolation:</strong> Every registered student maintains a dedicated session file and unique encryption initialization vector.</li>
+            <li><strong>Permanent Reset Control:</strong> You maintain full authority to delete your stored QUMS connection at any time using the one-click reset control.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="cta-band">
+      <h2>Ready to Connect Your Portal?</h2>
+      <p>Set up your account in minutes and receive automatic updates directly on Telegram.</p>
+      <div class="cta-actions">
+        <a class="btn btn-lg" href="/qums-setup">Open QUMS Setup</a>
+        <a class="btn btn-lg btn-ghost" href="/features">View Features</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand"><span class="dot" aria-hidden="true"></span> ClassQU</div>
+          <p class="footer-tagline">Track. Alert. Stay Updated.</p>
+          <p class="footer-about">
+            ClassQU helps students monitor their QUMS attendance and receive attendance and academic notifications through Telegram.
+          </p>
+        </div>
+        <div class="footer-col">
+          <h3>Guides</h3>
+          <ul>
+            <li><a href="/attendance-calculator-guide">Attendance Calculator</a></li>
+            <li><a href="/qums-troubleshooting">QUMS Troubleshooting</a></li>
+            <li><a href="/telegram-guide">Telegram Notifications</a></li>
+            <li><a href="/security-and-privacy">Data Security Guide</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Product</h3>
+          <ul>
+            <li><a href="/features">Features</a></li>
+            <li><a href="/how-it-works">How It Works</a></li>
+            <li><a href="/faq">FAQ</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Legal</h3>
+          <ul>
+            <li><a href="/privacy">Privacy Policy</a></li>
+            <li><a href="/terms">Terms &amp; Conditions</a></li>
+            <li><a href="/contact">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© <span data-year>2026</span> ClassQU. All rights reserved.</span>
+        <span>Not affiliated with the QUMS portal itself. Data belongs to the student's own QUMS account.</span>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — ClassQU</title>
+  <meta name="description" content="ClassQU dashboard — your QUMS attendance, connection status and quick actions." />
+  <meta name="theme-color" content="#1e3a8a" />
+<meta name="google-site-verification" content="google8e16ee4aea8f0348.html" />
+  <meta name="robots" content="noindex" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/style.css" />
+  <script src="/site.js" defer></script>
+</head>
+<body>
+  <header class="nav">
+    <a class="brand brand-link" href="/dashboard">
+      <img src="/logo.svg" alt="ClassQU Logo" class="brand-logo" width="24" height="24" />
+      <span>ClassQU</span>
+    </a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="/dashboard">Dashboard</a>
+      <a href="/qums-setup">QUMS Setup</a>
+      <a href="/telegram-setup">Telegram</a>
+      <a href="/admin" id="adminLink" class="hidden">Admin</a>
+    </nav>
+    <div class="nav-actions">
+      <span class="pill" id="userName">…</span>
+      <a href="/logout" class="nav-logout">Logout</a>
+      <button id="navToggle" class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="drawer">☰</button>
+    </div>
+  </header>
+
+  <!-- mobile slide-out drawer (visible <=640px) — Dashboard / QUMS Setup / Telegram / Logout only -->
+  <div id="drawerOverlay" class="drawer-overlay"></div>
+  <aside id="drawer" class="drawer" aria-hidden="true" aria-label="Mobile menu">
+    <div class="drawer-head">
+      <span>ClassQU</span>
+      <button type="button" class="drawer-close" aria-label="Close menu">✕</button>
+    </div>
+    <nav class="drawer-nav">
+      <a href="/dashboard">🏠 Dashboard</a>
+      <a href="/qums-setup">⚙️ QUMS Setup</a>
+      <a href="/telegram-setup">💬 Telegram</a>
+      <a href="/admin" id="adminDrawerLink" class="hidden">🛡️ Admin</a>
+      <a href="/logout" class="drawer-logout">🚪 Logout</a>
+    </nav>
+  </aside>
+
+  <div class="container">
+    <div id="sessionExpiredBanner" class="banner warn hidden" style="background: #fef2f2; border-color: #fca5a5; color: #991b1b;">
+      <span>⚠️ <strong>QUMS Session Expired</strong> — Your login session has expired. Automatic tracking is paused until reconnection.</span>
+      <a href="/qums-setup" class="btn" style="background: #dc2626; color: #fff; text-decoration: none; padding: 6px 12px; border-radius: 6px; font-weight: 600; margin-left: 10px;">🔐 Reconnect QUMS</a>
+    </div>
+    <div id="setupBanner" class="banner warn hidden">
+      <span>⚠️ QUMS setup is incomplete — complete the QID + captcha login so alerts can start.</span>
+      <a href="/qums-setup">Complete it →</a>
+    </div>
+    <div id="tgBanner" class="banner info hidden">
+      <span id="tgBannerText">💬 Telegram is not connected — press the button and start the bot chat.</span>
+      <a id="tgConnectBtn" class="btn accent hidden" href="#" target="_blank" rel="noopener">💬 Connect Telegram</a>
+    </div>
+
+    <div class="card">
+      <div class="row" style="justify-content: space-between; align-items: flex-start;">
+        <div>
+          <h1 class="welcome-h1">Hello, <span id="welcomeName">Student</span> 👋 <span id="welcomeYearSem" class="badge-off hidden" style="font-size: 13px; font-weight: normal; margin-left: 6px; vertical-align: middle;"></span></h1>
+          <div class="sub">Your attendance and connection status — data comes live from QUMS.</div>
+        </div>
+        <button id="refreshBtn" type="button">↻ Refresh Attendance</button>
+      </div>
+
+      <div class="status-grid">
+        <div class="status-card">
+          <div class="status-label">QUMS connection</div>
+          <div class="status-value">
+            <span class="status-dot off" id="qumsDot" aria-hidden="true"></span>
+            <span id="qumsState">QUMS: checking…</span>
+          </div>
+          <div class="status-note">
+            <a href="/qums-setup">Open QUMS Setup</a>
+            <button id="qumsLogoutBtn" class="link hidden" style="margin-left: 8px; color: var(--muted);" type="button">Logout</button>
+          </div>
+        </div>
+        <div class="status-card">
+          <div class="status-label">Telegram connection</div>
+          <div class="status-value">
+            <span class="status-dot off" id="tgDot" aria-hidden="true"></span>
+            <span id="tgState">Telegram: checking…</span>
+          </div>
+          <div class="status-note">
+            <a href="/telegram-setup">Open Telegram settings</a>
+            <a id="tgOpenBtn" class="btn btn-outline hidden" href="#" target="_blank" rel="noopener" style="margin-left:8px; padding:4px 8px; font-size:.8rem;">💬 Open Telegram</a>
+            <button id="tgUnlinkBtn" class="link hidden" style="margin-left: 8px; color: var(--muted);" type="button">Disconnect</button>
+          </div>
+        </div>
+        <div class="status-card">
+          <div class="status-label">Overall attendance</div>
+          <div class="status-value" id="overallValue">—</div>
+          <div class="status-note" id="overallNote">Across all subjects</div>
+        </div>
+        <div class="status-card">
+          <div class="status-label">Today's classes</div>
+          <div class="status-value" id="todayCount">—</div>
+          <div class="status-note">
+            <button type="button" class="link" id="todayLoadBtn">Load today's classes</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="todayBox" class="hidden">
+        <div class="section-title" style="margin-top:16px;">Today's classes</div>
+        <ul class="today-list" id="todayList"></ul>
+      </div>
+
+      <div id="status" class="form-ok hidden"></div>
+      <div class="chips" id="chips"></div>
+      <div id="errorBox" class="form-error hidden" role="alert" aria-live="polite"></div>
+
+      <div class="row" style="justify-content: flex-end; align-items: center; gap: 8px; margin: 12px 0 8px;">
+        <label for="guidanceLanguage" class="form-hint" style="margin: 0;">Guidance:</label>
+        <select id="guidanceLanguage" aria-label="Guidance language" style="width: auto; padding: 5px 8px; font-size: .82rem;">
+          <option value="hinglish">Hinglish</option>
+          <option value="english">English</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table id="table" hidden>
+          <thead>
+            <tr><th>Subject</th><th>Code</th><th>Attended</th><th>%</th><th>Status</th><th>Guidance</th></tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+
+
+    <div class="card">
+      <div class="section-title">How ClassQU notifies you</div>
+      <ul class="check-list">
+        <li>Today's classes each morning, with room and teacher.</li>
+        <li>Attendance updates when a teacher marks a period.</li>
+        <li>Alerts for attendance entered later for an earlier class date.</li>
+        <li>New assignment notifications, plus a reminder on the last date.</li>
+      </ul>
+      <p class="form-hint">Every message goes to your own Telegram chat only.</p>
+    </div>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div class="footer-grid">
+          <div><div class="footer-brand"><span class="dot" aria-hidden="true"></span> ClassQU</div><p class="footer-tagline">Track. Alert. Stay Updated.</p><p class="footer-about">Monitor QUMS attendance and receive academic notifications through Telegram.</p></div>
+          <div class="footer-col"><h3>Guides</h3><ul><li><a href="/attendance-calculator-guide">Attendance Calculator</a></li><li><a href="/qums-troubleshooting">QUMS Troubleshooting</a></li><li><a href="/telegram-guide">Telegram Notifications</a></li></ul></div>
+          <div class="footer-col"><h3>Product</h3><ul><li><a href="/features">Features</a></li><li><a href="/faq">FAQ</a></li><li><a href="/contact">Contact</a></li></ul></div>
+          <div class="footer-col"><h3>Legal</h3><ul><li><a href="/privacy">Privacy Policy</a></li><li><a href="/terms">Terms &amp; Conditions</a></li><li><a href="/about">About</a></li></ul></div>
+        </div>
+        <div class="footer-bottom"><span>© <span data-year>2026</span> ClassQU. All rights reserved.</span><span>Not affiliated with the QUMS portal itself.</span></div>
+      </div>
+    </footer>
+
+    <div id="qumsResetSlot" class="qums-reset-slot">
+      <button id="permanentQumsResetBtn" type="button">Reset / Delete QUMS Connection</button>
+    </div>
+  </div>
+
+  <script>
+    /*
+     * Dashboard:
+     *   - fetch /api/attendance, /api/me, /api/telegram/status, /api/telegram/unlink
+     *   - the mobile drawer lives in /site.js (no duplicate drawer logic here)
+     */
+    const $ = (id) => document.getElementById(id);
+    const statusEl = $('status'), chipsEl = $('chips'), tableEl = $('table'), tbodyEl = $('tbody');
+    const errorBox = $('errorBox'), refreshBtn = $('refreshBtn');
+    const guidanceLanguageEl = $('guidanceLanguage');
+    let latestAttendance = null;
+    guidanceLanguageEl.value = localStorage.getItem('classqu-guidance-language') || 'english';
+
+    function guidanceText(subject) {
+      if (guidanceLanguageEl.value !== 'hinglish') {
+        if (subject.status === 'below-75') {
+          const count = subject.classesNeeded || 1;
+          return `Attend the next ${count} ${count === 1 ? 'class' : 'classes'} to reach 75%.`;
+        }
+        if (subject.status === 'ok') {
+          const count = subject.canSkip || 0;
+          return `You can miss ${count} ${count === 1 ? 'class' : 'classes'} and remain at 75%+.`;
+        }
+        return 'Attendance data could not be read — please check the portal data.';
+      }
+      return subject.guidance || '';
+      if (subject.status === 'below-75') {
+        const count = subject.classesNeeded || 1;
+        return `Attend the next ${count} ${count === 1 ? 'class' : 'classes'} to reach 75%.`;
+      }
+      if (subject.status === 'ok') {
+        const count = subject.canSkip || 0;
+        return `You can miss ${count} ${count === 1 ? 'class' : 'classes'} and remain at 75%+.`;
+      }
+      return 'Attendance data could not be read — please check again.';
+    }
+
+    function chip(label, value) {
+      const c = document.createElement('div');
+      c.className = 'chip';
+      const t = document.createElement('span'); t.textContent = label;
+      const b = document.createElement('b'); b.textContent = value;
+      c.appendChild(t); c.appendChild(b);
+      return c;
+    }
+
+    function render(data) {
+      latestAttendance = data;
+      const s = data.summary || {};
+      chipsEl.innerHTML = '';
+      chipsEl.appendChild(chip('Subjects', s.totalSubjects != null ? s.totalSubjects : '-'));
+      chipsEl.appendChild(chip('Below 75%', s.below75 != null ? s.below75 : '-'));
+      chipsEl.appendChild(chip('OK (>=75%)', s.ok != null ? s.ok : '-'));
+      const overallVal = data.overall
+        ? (data.overall.percentageRaw || data.overall.percentage)
+        : (data.period && (data.period.overallPercentageRaw || data.period.overallPercentage != null)
+            ? (data.period.overallPercentageRaw || data.period.overallPercentage)
+            : null);
+      if (overallVal != null) chipsEl.appendChild(chip('Overall', overallVal + '%'));
+      if (data.period && data.period.dateFrom) {
+        chipsEl.appendChild(chip('Period', data.period.dateFrom + ' – ' + data.period.dateTo));
+      }
+
+      // status card (overall attendance - exact as on QUMS portal)
+      $('overallValue').textContent = overallVal != null ? overallVal + '%' : '—';
+      $('overallNote').textContent = s.below75 != null
+        ? s.below75 + ' subject(s) below 75%'
+        : 'Across all subjects';
+
+      tbodyEl.innerHTML = '';
+      (data.subjects || []).forEach((sub) => {
+        const tr = document.createElement('tr');
+        const isBelow = sub.status === 'below-75';
+
+        const nameTd = document.createElement('td'); nameTd.textContent = sub.subject || '-'; tr.appendChild(nameTd);
+
+        const codeTd = document.createElement('td'); codeTd.textContent = sub.subjectCode || '—'; tr.appendChild(codeTd);
+
+        const attTd = document.createElement('td');
+        attTd.textContent = (sub.attendedEstimate != null && sub.totalClassesAssumed != null)
+          ? sub.attendedEstimate + ' / ' + sub.totalClassesAssumed : '—';
+        tr.appendChild(attTd);
+
+        const pctTd = document.createElement('td');
+        const pctSpan = document.createElement('span');
+        pctSpan.className = isBelow ? 'pct-bad' : 'pct-ok';
+        pctSpan.textContent = sub.percentage != null ? sub.percentage + '%' : '-';
+        pctTd.appendChild(pctSpan); tr.appendChild(pctTd);
+
+        const stTd = document.createElement('td');
+        const badge = document.createElement('span');
+        badge.className = 'badge ' + (isBelow ? 'bad' : 'ok');
+        badge.textContent = isBelow ? 'ATTENTION' : 'OK';
+        stTd.appendChild(badge); tr.appendChild(stTd);
+
+        const gTd = document.createElement('td');
+        const g = document.createElement('div');
+        g.className = 'guidance';
+        const rawGuidance = guidanceText(sub);
+        g.textContent = rawGuidance.replace(/\s*\((?:abhi|approx)[^)]*\)\.?/gi, '.').replace(/\.{2,}/g, '.').trim();
+        gTd.appendChild(g); tr.appendChild(gTd);
+
+        tbodyEl.appendChild(tr);
+      });
+      tableEl.hidden = false;
+    }
+
+    guidanceLanguageEl.addEventListener('change', () => {
+      localStorage.setItem('classqu-guidance-language', guidanceLanguageEl.value);
+      if (latestAttendance) render(latestAttendance);
+    });
+
+    async function loadAttendance(forceFresh = false) {
+      refreshBtn.disabled = true;
+      errorBox.classList.add('hidden');
+      const hasRendered = !tableEl.hidden;
+      if (!hasRendered) {
+        statusEl.classList.remove('hidden');
+        statusEl.textContent = 'Fetching attendance from QUMS portal…';
+      } else {
+        statusEl.classList.remove('hidden');
+        statusEl.textContent = 'Refreshing attendance from QUMS…';
+      }
+      try {
+        const url = forceFresh ? '/api/attendance?fresh=1' : '/api/attendance';
+        const res = await fetch(url);
+        if (res.status === 401) { location.href = '/login'; return; }
+        const data = await res.json();
+        if (!res.ok) {
+          statusEl.classList.add('hidden');
+          errorBox.textContent = (data.error || 'Unknown error') + (data.hint ? '  →  ' + data.hint : '');
+          errorBox.classList.remove('hidden');
+          if (data.code === 'QumsSetupRequired') {
+            $('setupBanner').classList.remove('hidden');
+          } else if (data.code === 'SessionExpiredError' || data.code === 'NoSessionError' || /session expired/i.test(data.error || '')) {
+            $('sessionExpiredBanner').classList.remove('hidden');
+            $('setupBanner').classList.add('hidden');
+            $('qumsDot').className = 'status-dot off';
+            $('qumsState').textContent = 'Session expired ⚠️';
+          }
+          return;
+        }
+        statusEl.classList.add('hidden');
+        try {
+          localStorage.setItem('qattend_attendance_cache', JSON.stringify(data));
+        } catch {}
+        render(data);
+      } catch (err) {
+        statusEl.classList.add('hidden');
+        if (!hasRendered) {
+          errorBox.textContent = 'Network error: ' + err.message;
+          errorBox.classList.remove('hidden');
+        }
+      } finally {
+        refreshBtn.disabled = false;
+      }
+    }
+
+    async function loadMe() {
+      try {
+        const res = await fetch('/api/me');
+        if (res.status === 401) { location.href = '/login'; return; }
+        const me = await res.json();
+        // The dashboard shows the QUMS student NAME only — the email stays
+        // internal (auth/database) and is never rendered in the UI.
+        const name = me.studentName || 'Student';
+        $('userName').textContent = name;
+        $('welcomeName').textContent = name;
+        if (me.qumsYearSem) {
+          $('welcomeYearSem').textContent = me.qumsYearSem;
+          $('welcomeYearSem').classList.remove('hidden');
+        } else {
+          $('welcomeYearSem').classList.add('hidden');
+        }
+        if (!me.qumsConfigured) {
+          $('setupBanner').classList.remove('hidden');
+          $('sessionExpiredBanner').classList.add('hidden');
+        } else if (me.qumsSessionStatus === 'expired') {
+          $('sessionExpiredBanner').classList.remove('hidden');
+          $('setupBanner').classList.add('hidden');
+        } else {
+          $('sessionExpiredBanner').classList.add('hidden');
+          $('setupBanner').classList.add('hidden');
+        }
+        $('qumsDot').className = 'status-dot ' + (me.qumsConfigured && me.qumsSessionStatus !== 'expired' ? 'on' : 'off');
+        $('qumsState').textContent = !me.qumsConfigured
+          ? 'Setup pending'
+          : (me.qumsSessionStatus === 'expired' ? 'Session expired ⚠️' : 'Connected ✅');
+        $('qumsLogoutBtn').classList.toggle('hidden', !me.qumsConfigured);
+        if (me.isAdmin) {
+          if ($('adminLink')) $('adminLink').classList.remove('hidden');
+          if ($('adminDrawerLink')) $('adminDrawerLink').classList.remove('hidden');
+        }
+      } catch {}
+    }
+
+    $('qumsLogoutBtn').addEventListener('click', async () => {
+      if (!confirm('QUMS logout? The session file will be deleted (Reconnect will only ask for the captcha).')) return;
+      $('qumsLogoutBtn').disabled = true;
+      try {
+        await fetch('/api/qums-logout', { method: 'POST' });
+      } catch {}
+      $('qumsLogoutBtn').disabled = false;
+      loadMe();
+    });
+
+    if ($('permanentQumsResetBtn')) {
+      $('permanentQumsResetBtn').addEventListener('click', async () => {
+        if (!confirm('Are you sure you want to permanently reset and delete your QUMS connection and saved credentials?\n\nThis will clear your saved QID, saved password, session, and monitoring. You can then log in with a new QID.')) {
+          return;
+        }
+        $('permanentQumsResetBtn').disabled = true;
+        try {
+          const res = await fetch('/api/qums-reset', { method: 'POST' });
+          const data = await res.json();
+          if (data.ok) {
+            location.href = '/qums-setup';
+          } else {
+            alert(data.error || 'Reset failed');
+          }
+        } catch (err) {
+          alert('Error: ' + err.message);
+        } finally {
+          if ($('permanentQumsResetBtn')) $('permanentQumsResetBtn').disabled = false;
+        }
+      });
+    }
+
+    // ---- Telegram deep-link connecting (single poll loop, stops once linked) ----
+    let tgPollTimer = null;
+    function stopTgPoll() { if (tgPollTimer) { clearInterval(tgPollTimer); tgPollTimer = null; } }
+
+    async function loadTelegramStatus() {
+      try {
+        const res = await fetch('/api/telegram/status');
+        if (res.status === 401) { location.href = '/login'; return; }
+        const st = await res.json();
+        if (!st.configured) {
+          $('tgBannerText').textContent = '⚠️ Telegram is not configured on this deployment — set TELEGRAM_BOT_TOKEN in the server environment and restart.';
+          $('tgBanner').classList.remove('hidden');
+          $('tgConnectBtn').classList.add('hidden');
+          $('tgDot').className = 'status-dot off';
+          $('tgState').textContent = 'Not available';
+          $('tgOpenBtn').classList.add('hidden');
+          $('tgUnlinkBtn').classList.add('hidden');
+          return; // polling stays on — a restart with the token set updates this page
+        }
+        if (st.connected) {
+          $('tgBanner').classList.add('hidden');
+          $('tgDot').className = 'status-dot on';
+          $('tgState').textContent = 'Connected ✅';
+          $('tgOpenBtn').href = st.linkUrl;
+          $('tgOpenBtn').classList.remove('hidden');
+          $('tgUnlinkBtn').classList.remove('hidden');
+          stopTgPoll();
+        } else {
+          $('tgBannerText').textContent = '💬 Telegram is not connected — press the button, Telegram opens, press "Start" — done.';
+          $('tgBanner').classList.remove('hidden');
+          $('tgConnectBtn').href = st.linkUrl;
+          $('tgConnectBtn').classList.remove('hidden');
+          $('tgDot').className = 'status-dot off';
+          $('tgState').textContent = 'Not connected';
+          $('tgOpenBtn').classList.add('hidden');
+          $('tgUnlinkBtn').classList.add('hidden');
+        }
+      } catch {}
+    }
+
+    let tgAttempts = 0;
+    function startTgPoll() {
+      stopTgPoll();
+      tgAttempts = 0;
+      tgPollTimer = setInterval(async () => {
+        tgAttempts++;
+        await loadTelegramStatus();
+        if (tgAttempts > 15) {
+          // Slow down after 45s if not linked yet to save network/CPU
+          stopTgPoll();
+          tgPollTimer = setInterval(loadTelegramStatus, 15000);
+        }
+      }, 3000);
+    }
+
+    $('tgUnlinkBtn').addEventListener('click', async () => {
+      if (!confirm('Disconnect Telegram? No further messages will be sent to that chat.')) return;
+      $('tgUnlinkBtn').disabled = true;
+      try {
+        await fetch('/api/telegram/unlink', { method: 'POST' });
+      } catch {}
+      $('tgUnlinkBtn').disabled = false;
+      loadTelegramStatus();
+      startTgPoll(); // re-arm so a fresh link is detected
+    });
+
+    // ---- Today's classes (existing GET /api/today — loaded on demand) ----
+    async function loadToday(btn) {
+      btn.disabled = true;
+      const box = $('todayBox'), list = $('todayList');
+      list.textContent = '';
+      const li = document.createElement('li');
+      li.textContent = 'Loading today\'s classes from QUMS…';
+      list.appendChild(li);
+      box.classList.remove('hidden');
+      try {
+        const res = await fetch('/api/today');
+        if (res.status === 401) { location.href = '/login'; return; }
+        const data = await res.json();
+        list.textContent = '';
+        const periods = (data && data.periods) || [];
+        $('todayCount').textContent = res.ok ? String(periods.length) : '—';
+        if (!res.ok) {
+          const err = document.createElement('li');
+          err.textContent = (data.error || 'Could not load today\'s classes.') + (data.hint ? '  →  ' + data.hint : '');
+          list.appendChild(err);
+          return;
+        }
+        if (!periods.length) {
+          const none = document.createElement('li');
+          none.textContent = 'No classes found for today.';
+          list.appendChild(none);
+          return;
+        }
+        periods.forEach((p) => {
+          const row = document.createElement('li');
+          const subject = document.createElement('span');
+          subject.textContent = (p.period ? p.period + ' · ' : '') + (p.subject || p.subjectCode || 'Class');
+          const meta = document.createElement('span');
+          meta.className = 'period';
+          meta.textContent = [p.duration, p.employee, p.room ? 'Room: ' + p.room : ''].filter(Boolean).join(' • ');
+          row.appendChild(subject);
+          row.appendChild(meta);
+          list.appendChild(row);
+        });
+      } catch (err) {
+        list.textContent = '';
+        const errLi = document.createElement('li');
+        errLi.textContent = 'Network error: ' + err.message;
+        list.appendChild(errLi);
+      }
+      btn.disabled = false;
+    }
+
+    refreshBtn.addEventListener('click', () => loadAttendance(true));
+    $('todayLoadBtn').addEventListener('click', (e) => loadToday(e.currentTarget));
+
+    // Instant First Paint from localStorage cache if present (0ms display!)
+    try {
+      const cached = localStorage.getItem('qattend_attendance_cache');
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (parsed && Array.isArray(parsed.subjects) && parsed.subjects.length > 0) {
+          render(parsed);
+        }
+      }
+    } catch {}
+
+    loadMe();
+    loadAttendance(false);
+    loadTelegramStatus();
+    startTgPoll();
+    // (mobile drawer/active-nav/year are handled once by /site.js)
+  </script>
+</body>
+</html>

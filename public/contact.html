@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact — ClassQU</title>
+  <meta name="description" content="How to reach the ClassQU project: support channels and Telegram updates." />
+  <meta name="theme-color" content="#1e3a8a" />
+  <meta property="og:site_name" content="ClassQU" />
+  <meta property="og:title" content="Contact — ClassQU" />
+  <meta property="og:description" content="Report a problem or ask a question about ClassQU." />
+  <meta property="og:type" content="website" />
+  <link rel="canonical" href="https://qattend.onrender.com/contact" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/style.css" />
+  <script src="/site.js" defer></script>
+</head>
+<body>
+  <header class="nav">
+    <a class="brand brand-link" href="/">
+      <img src="/logo.svg" alt="ClassQU Logo" class="brand-logo" width="24" height="24" />
+      <span>ClassQU</span>
+    </a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="/">Home</a>
+      <a href="/features">Features</a>
+      <a href="/how-it-works">How It Works</a>
+      <a href="/attendance-calculator-guide">Calculator Guide</a>
+      <a href="/about">About</a>
+      <a href="/faq">FAQ</a>
+      <a href="/contact" class="active">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <span class="nav-cta" data-auth-swap>
+        <a class="btn btn-ghost" href="/login">Login</a>
+        <a class="btn" href="/register">Register</a>
+      </span>
+      <button id="navToggle" class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="drawer">☰</button>
+    </div>
+  </header>
+
+  <div id="drawerOverlay" class="drawer-overlay"></div>
+  <aside id="drawer" class="drawer" aria-hidden="true" aria-label="Mobile menu">
+    <div class="drawer-head">ClassQU</div>
+    <nav class="drawer-nav">
+      <a href="/">🏠 Home</a>
+      <a href="/features">✨ Features</a>
+      <a href="/how-it-works">🔄 How It Works</a>
+      <a href="/attendance-calculator-guide">🧮 Calculator Guide</a>
+      <a href="/qums-troubleshooting">🔧 QUMS Troubleshooting</a>
+      <a href="/telegram-guide">💬 Telegram Guide</a>
+      <a href="/security-and-privacy">🔒 Security &amp; Privacy</a>
+      <a href="/about">ℹ️ About</a>
+      <a href="/faq">❓ FAQ</a>
+      <a href="/contact">✉️ Contact</a>
+      <a href="/login">🔑 Login</a>
+      <a href="/register">📝 Register</a>
+    </nav>
+  </aside>
+
+  <main>
+    <section class="page-head">
+      <h1>Contact ClassQU</h1>
+      <p>Found a bug, hit a setup problem, or want to suggest something? These are the real channels.</p>
+    </section>
+
+    <section class="section">
+      <div class="section-inner">
+        <div class="grid grid-4">
+          <div class="contact-card">
+            <div class="contact-icon" aria-hidden="true">✉️</div>
+            <h3>Email Support</h3>
+            <p>Direct developer & support email for assistance, feedback, or inquiries.</p>
+            <p style="margin-top:12px;">
+              <a class="btn btn-outline" href="mailto:siddh8786@gmail.com" style="word-break: break-all;"><strong id="contactEmailValue">siddh8786@gmail.com</strong></a>
+            </p>
+            <p id="contactEmailNote" class="form-hint" style="margin-top:8px;">Direct support &amp; developer email for ClassQU assistance.</p>
+          </div>
+          <div class="contact-card">
+            <div class="contact-icon" aria-hidden="true">💻</div>
+            <h3>GitHub</h3>
+            <p>Check out the open-source codebase, star the repo, or track development updates.</p>
+            <p style="margin-top:12px;">
+              <a class="btn btn-outline" href="https://github.com/SiddUrYrr" target="_blank" rel="noopener noreferrer">SiddUrYrr</a>
+            </p>
+          </div>
+          <div class="contact-card">
+            <div class="contact-icon" aria-hidden="true">💼</div>
+            <h3>LinkedIn</h3>
+            <p>Connect with the developer on LinkedIn for professional networking & discussion.</p>
+            <p style="margin-top:12px;">
+              <a class="btn btn-outline" href="http://www.linkedin.com/in/siddharth-kushwaha-13b07b378/" target="_blank" rel="noopener noreferrer">Siddharth Kushwaha</a>
+            </p>
+          </div>
+          <div class="contact-card">
+            <div class="contact-icon" aria-hidden="true">💬</div>
+            <h3>Telegram Support</h3>
+            <p>Connect your account with our bot for real-time status and assistance directly.</p>
+            <p style="margin-top:12px;">
+              <a class="btn" href="/telegram-setup">Open Bot Setup</a>
+            </p>
+          </div>
+        </div>
+
+        <div class="callout" style="margin-top:26px;">
+          <strong>About direct messaging:</strong> For quick responses and updates, please use our Telegram bot channel or check the status from your account dashboard.
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt">
+      <div class="section-inner">
+        <div class="section-head">
+          <h2 class="section-title-lg">What to include</h2>
+          <p class="section-lead">A little context makes a problem much faster to solve.</p>
+        </div>
+        <ul class="check-list">
+          <li>Which page you were on (for example: QUMS Setup or Telegram).</li>
+          <li>What you expected to happen, and what actually happened.</li>
+          <li>The exact message you saw, if any error was displayed.</li>
+          <li>Whether QUMS and Telegram show as connected on your dashboard.</li>
+        </ul>
+        <div class="callout warn" style="margin-top:18px;">
+          <strong>Please never send your QUMS password, QID, session files, session secret,
+          encryption key or bot token.</strong> Nobody from ClassQU needs them to help you, and
+          sharing them puts your account at risk.
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand"><span class="dot" aria-hidden="true"></span> ClassQU</div>
+          <p class="footer-tagline">Track. Alert. Stay Updated.</p>
+          <p class="footer-about">
+            ClassQU helps students monitor their QUMS attendance and receive attendance and
+            academic notifications through Telegram.
+          </p>
+        </div>
+        <div class="footer-col">
+          <h3>Guides</h3>
+          <ul>
+            <li><a href="/attendance-calculator-guide">Attendance Calculator</a></li>
+            <li><a href="/qums-troubleshooting">QUMS Troubleshooting</a></li>
+            <li><a href="/telegram-guide">Telegram Notifications</a></li>
+            <li><a href="/security-and-privacy">Data Security Guide</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Product</h3>
+          <ul>
+            <li><a href="/features">Features</a></li>
+            <li><a href="/how-it-works">How It Works</a></li>
+            <li><a href="/faq">FAQ</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Legal</h3>
+          <ul>
+            <li><a href="/privacy">Privacy Policy</a></li>
+            <li><a href="/terms">Terms &amp; Conditions</a></li>
+            <li><a href="/about">About</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Developer</h3>
+          <ul>
+            <li><a href="mailto:siddh8786@gmail.com">Email</a></li>
+            <li><a href="https://github.com/SiddUrYrr" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            <li><a href="http://www.linkedin.com/in/siddharth-kushwaha-13b07b378/" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© <span data-year>2026</span> ClassQU. All rights reserved.</span>
+        <span>Not affiliated with the QUMS portal itself. Data belongs to the student's own QUMS account.</span>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

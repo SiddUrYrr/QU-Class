@@ -1,0 +1,17 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Register - ClassQU</title><link rel="stylesheet" href="/style.css"></head>
+<body><main class="auth-bg"><section class="auth-card">
+<div class="auth-brand">ClassQU</div><p class="auth-tagline">Smart University Attendance Monitor</p><h1>Create your account</h1>
+<form id="form"><label class="form-label" for="fullName">Full name</label><input class="form-input" id="fullName" autocomplete="name" required>
+<label class="form-label" for="email">Email</label><input class="form-input" id="email" type="email" autocomplete="username" required>
+<label class="form-label" for="password">Password</label><input class="form-input" id="password" type="password" minlength="10" autocomplete="new-password" required>
+<label class="form-label" for="confirmPassword">Confirm password</label><input class="form-input" id="confirmPassword" type="password" minlength="10" autocomplete="new-password" required>
+<p class="form-hint">Use at least 10 characters, including a letter and a number.</p><div id="error" class="form-error hidden" role="alert"></div>
+<button id="submit" type="submit" style="width:100%;margin-top:18px">Create account</button></form>
+<p class="auth-foot">Already registered? <a href="/login">Login</a></p>
+</section></main><script>
+const form=document.getElementById('form'),error=document.getElementById('error');
+form.addEventListener('submit',async e=>{e.preventDefault();error.classList.add('hidden');const b=document.getElementById('submit');b.disabled=true;
+const payload={fullName:fullName.value,email:email.value,password:password.value,confirmPassword:confirmPassword.value};
+const r=await fetch('/api/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});const d=await r.json();
+if(!r.ok){error.textContent=d.error||'Registration failed.';error.classList.remove('hidden');b.disabled=false;return}location.replace(d.redirect||'/qums-setup');});
+</script><footer class="site-footer"><div class="footer-inner"><div class="footer-bottom"><span>© <span data-year>2026</span> ClassQU — Track. Alert. Stay Updated.</span><span><a href="/contact">Contact</a> · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a></span></div></div></footer></body></html>

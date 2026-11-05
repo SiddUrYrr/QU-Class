@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Telegram Attendance &amp; Assignment Notifications Guide — ClassQU</title>
+  <meta name="description" content="Complete guide to ClassQU Telegram notifications: linking instructions, exact notification schedules (8:30 AM schedule, live marks, 7:00 PM reminders), commands, and privacy." />
+  <meta name="theme-color" content="#1e3a8a" />
+  <meta property="og:site_name" content="ClassQU" />
+  <meta property="og:title" content="Telegram Attendance &amp; Assignment Notifications Guide — ClassQU" />
+  <meta property="og:description" content="Learn how ClassQU's Telegram bot works, exact notification timings, supported commands, auto-delete behavior, and per-student chat isolation." />
+  <meta property="og:type" content="article" />
+  <link rel="canonical" href="https://qattend.onrender.com/telegram-guide" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/style.css" />
+  <script src="/site.js" defer></script>
+</head>
+<body>
+  <header class="nav">
+    <a class="brand brand-link" href="/">
+      <img src="/logo.svg" alt="ClassQU Logo" class="brand-logo" width="24" height="24" />
+      <span>ClassQU</span>
+    </a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="/">Home</a>
+      <a href="/features">Features</a>
+      <a href="/how-it-works">How It Works</a>
+      <a href="/telegram-guide" class="active">Telegram Guide</a>
+      <a href="/about">About</a>
+      <a href="/faq">FAQ</a>
+      <a href="/contact">Contact</a>
+    </nav>
+    <div class="nav-actions">
+      <span class="nav-cta" data-auth-swap>
+        <a class="btn btn-ghost" href="/login">Login</a>
+        <a class="btn" href="/register">Register</a>
+      </span>
+      <button id="navToggle" class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="drawer">☰</button>
+    </div>
+  </header>
+
+  <div id="drawerOverlay" class="drawer-overlay"></div>
+  <aside id="drawer" class="drawer" aria-hidden="true" aria-label="Mobile menu">
+    <div class="drawer-head">ClassQU</div>
+    <nav class="drawer-nav">
+      <a href="/">🏠 Home</a>
+      <a href="/features">✨ Features</a>
+      <a href="/how-it-works">🔄 How It Works</a>
+      <a href="/attendance-calculator-guide">🧮 Calculator Guide</a>
+      <a href="/qums-troubleshooting">🔧 QUMS Troubleshooting</a>
+      <a href="/telegram-guide">💬 Telegram Guide</a>
+      <a href="/security-and-privacy">🔒 Security &amp; Privacy</a>
+      <a href="/about">ℹ️ About</a>
+      <a href="/faq">❓ FAQ</a>
+      <a href="/contact">✉️ Contact</a>
+      <a href="/login">🔑 Login</a>
+      <a href="/register">📝 Register</a>
+    </nav>
+  </aside>
+
+  <main>
+    <section class="page-head">
+      <h1>Telegram Notifications &amp; Bot Guide</h1>
+      <p class="hero-tagline">Timely. Accurate. Clutter-Free.</p>
+      <p style="margin-top:10px;">
+        Discover how ClassQU connects to your personal Telegram chat, the verified schedules of all academic alerts, and the commands you can use.
+      </p>
+    </section>
+
+    <section class="section">
+      <div class="section-inner">
+        <article class="prose">
+          <h2>1. How Telegram Linking Works</h2>
+          <p>
+            ClassQU uses a secure deep-linking protocol through the official Telegram Bot API. Instead of asking you for your Telegram phone number, ClassQU generates a unique, cryptographically random linkage token:
+          </p>
+          <ol>
+            <li>In your ClassQU dashboard, click <strong>Connect Telegram</strong>.</li>
+            <li>A button opens Telegram directly to the official ClassQU bot with your unique start payload: <code>https://t.me/&lt;bot&gt;?start=&lt;code&gt;</code>.</li>
+            <li>Pressing <strong>Start</strong> in Telegram verifies the token on the server and permanently binds that Telegram chat ID to your student account.</li>
+            <li><strong>Strict Multi-Tenant Isolation:</strong> One Telegram chat can belong to exactly one ClassQU account. Notifications are addressed to you by your official student name (never your email), and data is never cross-delivered between students.</li>
+          </ol>
+
+          <h2>2. Verified Notification Types &amp; Exact Schedules</h2>
+          <p>
+            Every notification delivered by ClassQU corresponds to an active background process verified in the application code:
+          </p>
+
+          <div style="background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:18px; margin:18px 0; box-shadow:var(--shadow);">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+              <h3 style="margin:0; color:var(--navy,#0f172a);">🌅 8:30 AM IST — Daily Class Timetable</h3>
+              <span style="font-size:0.75rem; background:#e0f2fe; color:#0369a1; padding:3px 8px; border-radius:6px; font-weight:700;">Cron: 30 8 * * *</span>
+            </div>
+            <p style="margin:8px 0 0; font-size:0.9rem;">
+              Every morning at <strong>8:30 AM IST</strong>, ClassQU delivers your complete lecture schedule for the day before first period starts. Each entry specifies the period timing, course code, subject title, room number, and assigned faculty member.
+            </p>
+            <p style="margin:6px 0 0; font-size:0.82rem; color:var(--muted,#64748b);">
+              <em>Resilience:</em> Includes automatic missed-run recovery if the server was temporarily sleeping, with an 11:00 AM IST cutoff to avoid delivering outdated morning messages.
+            </p>
+          </div>
+
+          <div style="background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:18px; margin:18px 0; box-shadow:var(--shadow);">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+              <h3 style="margin:0; color:var(--navy,#0f172a);">⚡ Fast Loop — Real-Time Attendance Marking</h3>
+              <span style="font-size:0.75rem; background:#dcfce7; color:#15803d; padding:3px 8px; border-radius:6px; font-weight:700;">Interval: Every 5 Mins</span>
+            </div>
+            <p style="margin:8px 0 0; font-size:0.9rem;">
+              During college hours (<strong>08:30 to 17:00 IST</strong>), ClassQU monitors your today's attendance table every 5 minutes. The moment a professor transitions a period from "N.M." (Not Marked) to Present (✅) or Absent (❌), an instant alert is sent to your chat showing the subject, teacher, and status.
+            </p>
+          </div>
+
+          <div style="background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:18px; margin:18px 0; box-shadow:var(--shadow);">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+              <h3 style="margin:0; color:var(--navy,#0f172a);">🗓️ Month Loop — Backdated Attendance Updates</h3>
+              <span style="font-size:0.75rem; background:#fef3c7; color:#b45309; padding:3px 8px; border-radius:6px; font-weight:700;">Interval: Every 10 Mins</span>
+            </div>
+            <p style="margin:8px 0 0; font-size:0.9rem;">
+              Teachers frequently enter or modify attendance records days after a class was conducted. ClassQU periodically scans the university's full Monthly Register. If attendance is recorded retroactively for an earlier date, you receive an alert citing the exact historical class date and whether you were marked present or absent.
+            </p>
+          </div>
+
+          <div style="background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:18px; margin:18px 0; box-shadow:var(--shadow);">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+              <h3 style="margin:0; color:var(--navy,#0f172a);">📚 Assignment Notifications</h3>
+              <span style="font-size:0.75rem; background:#f3e8ff; color:#7e22ce; padding:3px 8px; border-radius:6px; font-weight:700;">Interval: Every 30 Mins</span>
+            </div>
+            <p style="margin:8px 0 0; font-size:0.9rem;">
+              ClassQU checks your university academic portal for newly published assignments every 30 minutes. The notification provides the subject code, assignment topic, date published, and final submission deadline. Persistent fingerprint deduplication guarantees an assignment is never announced twice.
+            </p>
+          </div>
+
+          <div style="background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:18px; margin:18px 0; box-shadow:var(--shadow);">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+              <h3 style="margin:0; color:var(--navy,#0f172a);">⏰ 7:00 PM IST — Assignment Deadline Reminders</h3>
+              <span style="font-size:0.75rem; background:#fee2e2; color:#b91c1c; padding:3px 8px; border-radius:6px; font-weight:700;">Cron: 0 19 * * *</span>
+            </div>
+            <p style="margin:8px 0 0; font-size:0.9rem;">
+              Every evening at <strong>7:00 PM IST</strong>, ClassQU reviews pending assignments. If an assignment deadline falls on today, a high-priority reminder is sent so you have time left to finalize your submission before the day concludes.
+            </p>
+          </div>
+
+          <div style="background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:18px; margin:18px 0; box-shadow:var(--shadow);">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+              <h3 style="margin:0; color:var(--navy,#0f172a);">📊 On-Demand Attendance Summary</h3>
+              <span style="font-size:0.75rem; background:#f1f5f9; color:#475569; padding:3px 8px; border-radius:6px; font-weight:700;">Manual Trigger</span>
+            </div>
+            <p style="margin:8px 0 0; font-size:0.9rem;">
+              Whenever you want a complete, subject-by-subject attendance summary sent to your Telegram chat, click <strong>Send Attendance Summary</strong> on your web dashboard. Note: ClassQU does not run an automated nightly summary spam job; summaries are triggered purely on-demand.
+            </p>
+          </div>
+
+          <h2>3. Supported Bot Commands</h2>
+          <div style="overflow-x:auto;">
+            <table style="width:100%; border-collapse:collapse; margin:16px 0; font-size:0.88rem; text-align:left;">
+              <thead>
+                <tr style="background:#f8fafc; border-bottom:2px solid #cbd5e1;">
+                  <th style="padding:10px 12px;">Command / Message</th>
+                  <th style="padding:10px 12px;">Description</th>
+                  <th style="padding:10px 12px;">Auto-Delete Delay</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom:1px solid #e2e8f0;">
+                  <td style="padding:10px 12px;"><code>/start</code></td>
+                  <td style="padding:10px 12px;">Connects or confirms account linkage.</td>
+                  <td style="padding:10px 12px;">Permanent or standard</td>
+                </tr>
+                <tr style="border-bottom:1px solid #e2e8f0;">
+                  <td style="padding:10px 12px;"><code>/status</code></td>
+                  <td style="padding:10px 12px;">Shows current overall attendance, subject count, and bot connection status.</td>
+                  <td style="padding:10px 12px; font-weight:600;">5 Minutes (300s)</td>
+                </tr>
+                <tr style="border-bottom:1px solid #e2e8f0;">
+                  <td style="padding:10px 12px;"><code>/reconnect</code></td>
+                  <td style="padding:10px 12px;">Initiates a fresh CAPTCHA prompt directly within Telegram if your QUMS session expires.</td>
+                  <td style="padding:10px 12px;">Until resolved</td>
+                </tr>
+                <tr style="border-bottom:1px solid #e2e8f0;">
+                  <td style="padding:10px 12px;"><code>DD/MM/YYYY</code> or <code>DD/MM/YY</code><br /><span style="font-size:0.75rem; color:#64748b;">(e.g. 14/10/2026)</span></td>
+                  <td style="padding:10px 12px;">Historical date attendance lookup: queries and breaks down your exact class attendance for any chosen calendar date.</td>
+                  <td style="padding:10px 12px; font-weight:600;">5 Minutes (300s)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2>4. Automatic Chat Cleanliness (Auto-Delete)</h2>
+          <p>
+            To prevent your personal Telegram conversation from turning into an unreadable wall of text, ClassQU features built-in automated message pruning:
+          </p>
+          <ul>
+            <li>Operational commands (such as date lookups and temporary queries) are automatically scheduled for deletion <strong>5 minutes</strong> after delivery.</li>
+            <li>Status overview reports automatically delete after <strong>5 minutes</strong>.</li>
+            <li>Important alerts (such as a Session Expired warning with a Reconnect button) are exempt from auto-delete and remain visible until you resolve them.</li>
+          </ul>
+
+          <h2>5. Disconnecting Telegram</h2>
+          <p>
+            You maintain full sovereignty over your Telegram channel. If you ever want to stop receiving notifications, click <strong>Disconnect</strong> in your dashboard or Telegram settings. ClassQU instantly unlinks your chat ID from the database, and no further messages will be dispatched until you explicitly reconnect.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="cta-band">
+      <h2>Stay Updated Without Opening Portals</h2>
+      <p>Connect your account today and let attendance alerts come directly to your Telegram chat.</p>
+      <div class="cta-actions">
+        <a class="btn btn-lg" href="/telegram-setup">Connect Telegram</a>
+        <a class="btn btn-lg btn-ghost" href="/features">View Features</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand"><span class="dot" aria-hidden="true"></span> ClassQU</div>
+          <p class="footer-tagline">Track. Alert. Stay Updated.</p>
+          <p class="footer-about">
+            ClassQU helps students monitor their QUMS attendance and receive attendance and academic notifications through Telegram.
+          </p>
+        </div>
+        <div class="footer-col">
+          <h3>Guides</h3>
+          <ul>
+            <li><a href="/attendance-calculator-guide">Attendance Calculator</a></li>
+            <li><a href="/qums-troubleshooting">QUMS Troubleshooting</a></li>
+            <li><a href="/telegram-guide">Telegram Notifications</a></li>
+            <li><a href="/security-and-privacy">Data Security Guide</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Product</h3>
+          <ul>
+            <li><a href="/features">Features</a></li>
+            <li><a href="/how-it-works">How It Works</a></li>
+            <li><a href="/faq">FAQ</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Legal</h3>
+          <ul>
+            <li><a href="/privacy">Privacy Policy</a></li>
+            <li><a href="/terms">Terms &amp; Conditions</a></li>
+            <li><a href="/contact">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© <span data-year>2026</span> ClassQU. All rights reserved.</span>
+        <span>Not affiliated with the QUMS portal itself. Data belongs to the student's own QUMS account.</span>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,31 @@
+{
+  "name": "ClassQU",
+  "version": "1.0.0",
+  "description": "QUMS portal attendance scraper + 75% calculator + web dashboard + daily Telegram summary (9 PM IST)",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "postinstall": "npx playwright install chromium",
+    "prestart": "npx playwright install chromium",
+    "scrape": "node src/scraper.js",
+    "test": "node test/nativeAuth.test.js && node test/parser.test.js && node test/multiuser.test.js && node test/telegramStart.test.js && node test/scheduler.test.js && node test/backdated.test.js && node test/assignments.test.js && node test/reconnect.test.js && node test/telegramCaptchaReconnect.test.js && node test/ui.test.js && node test/admin.test.js && node test/architecture.test.js && node test/telegramAutoDeleteCommands.test.js && node test/sessionExpiryFk23503Regression.test.js && node test/sessionExpiryFlowInvestigation.test.js && node test/sessionPersistenceRestart.test.js && node test/sessionStatusDashboardAdminParity.test.js && node test/sessionExpiryAlertRetention.test.js && node test/watcherSelfHealingRecovery.test.js && node test/timetableAndReconnectDedupe.test.js && node test/dateAttendanceLookup.test.js && node test/publicGuides.test.js",
+    "telegram-test": "node src/telegram.js",
+    "cron": "node src/scheduler.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-session": "^1.18.0",
+    "node-cron": "^3.0.3",
+    "node-telegram-bot-api": "^0.66.0",
+    "pg": "^8.23.0",
+    "playwright": "^1.45.0",
+    "resend": "^6.28.1",
+    "session-file-store": "^1.5.0"
+  }
+}
