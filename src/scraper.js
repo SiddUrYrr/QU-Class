@@ -9,6 +9,9 @@ const SESSION_FILE = path.join(__dirname, '..', 'session_state.json');
 const DASHBOARD_URL =
   process.env.QUMS_DASHBOARD_URL ||
   'https://qums.quantumuniversity.edu.in/Web_StudentAcademic/Cyborg_S_Dashboard';
+const ATTENDANCE_PAGE_URL =
+  process.env.QUMS_ATTENDANCE_URL ||
+  'https://qums.quantumuniversity.edu.in/Web_StudentAcademic/Cyborg_StudentAttendanceAcademic?id=Attendance';
 const TIMETABLE_URL =
   process.env.QUMS_TIMETABLE_URL ||
   'https://qums.quantumuniversity.edu.in/Web_StudentAcademic/Cyborg_StudentTimeTable?id=Time%20Table';
@@ -135,16 +138,13 @@ function clearCachedRegId(sessionPath) {
   if (sessionPath) regIdMemoryCache.delete(sessionPath);
 }
 
-/** Fetch the dashboard page and pull out the embedded RegID + selected Year/Sem. */
+/** Fetch the attendance page and pull out the embedded RegID + selected Year/Sem. */
 async function getStudentContext(apiContext, opts = {}) {
   const sessionPath = opts.sessionPath || null;
-  const resp = await apiGet(apiContext, DASHBOARD_URL, { timeout: 60000 });
+  let resp = await apiGet(apiContext, ATTENDANCE_PAGE_URL, { timeout: 60000 });
 
   if (!resp.ok()) {
-    throw new ScrapeError(
-      `Dashboard load failed (HTTP ${resp.status()}).`,
-      'Portal down ho sakta hai — thodi der baad retry karo.'
-    );
+    resp = await apiGet(apiContext, DASHBOARD_URL, { timeout: 60000 });
   }
 
   const html = await resp.text();
@@ -153,16 +153,35 @@ async function getStudentContext(apiContext, opts = {}) {
     throw new SessionExpiredError();
   }
 
-  // QUMS embeds RegID in the dashboard page.
-  const regIdMatch =
+  // QUMS embeds RegID in the attendance page. Older portal versions may only
+  // include it on the dashboard, so retain that page as a fallback.
+  let regIdMatch =
     html.match(/var\s+RegID\s*=\s*[\'\"](\d+)[\'\"]/i) ||
     html.match(/\bRegID\s*[:=]\s*[\'\"]?(\d+)[\'\"]?/i);
+
+  if (!regIdMatch) {
+    const dashboardResp = await apiGet(apiContext, DASHBOARD_URL, { timeout: 60000 });
+    if (!dashboardResp.ok()) {
+      throw new ScrapeError(
+        `Attendance page load failed (HTTP ${resp.status()}).`,
+        'Portal down ho sakta hai — thodi der baad retry karo.'
+      );
+    }
+    const dashboardHtml = await dashboardResp.text();
+    if (looksLikeLoginHtml(dashboardHtml)) {
+      if (sessionPath) clearCachedRegId(sessionPath);
+      throw new SessionExpiredError();
+    }
+    regIdMatch =
+      dashboardHtml.match(/var\s+RegID\s*=\s*[\'\"](\d+)[\'\"]/i) ||
+      dashboardHtml.match(/\bRegID\s*[:=]\s*[\'\"]?(\d+)[\'\"]?/i);
+  }
 
   const regId = regIdMatch ? regIdMatch[1] : null;
 
   if (!regId) {
     throw new ScrapeError(
-      'Dashboard HTML me RegID nahi mila.',
+      'Attendance page HTML me RegID nahi mila.',
       'Dashboard → QUMS Setup → Reconnect QUMS try karo.'
     );
   }
