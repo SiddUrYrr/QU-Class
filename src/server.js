@@ -65,6 +65,11 @@ const BASE_URL =
   normalizeBaseUrl(process.env.APP_BASE_URL) ||
   normalizeBaseUrl(process.env.RENDER_EXTERNAL_URL) ||
   `http://localhost:${PORT}`;
+const bootStatus = {
+  ready: false,
+  database: 'starting',
+  error: null,
+};
 
 fs.mkdirSync(SESSION_DIR, { recursive: true }); // Render/first-run pe dir missing na ho
 
@@ -927,7 +932,15 @@ app.post('/api/admin/users/bulk-reconnect-notify', requireAdmin, async (req, res
 // Health check — simple, secret-free: user counts / telegram state / internals
 // PUBLIC endpoint pe leak nahi karte. Render Health Check Path isi ko point karo.
 app.get('/health', (req, res) => {
-  res.json({ ok: true, status: 'ok', uptimeSeconds: Math.round(process.uptime()), timestamp: new Date().toISOString() });
+  res.json({
+    ok: true,
+    status: bootStatus.ready ? 'ok' : 'starting',
+    ready: bootStatus.ready,
+    database: bootStatus.database,
+    error: bootStatus.error,
+    uptimeSeconds: Math.round(process.uptime()),
+    timestamp: new Date().toISOString(),
+  });
 });
 
 // AntiDeploy wakes sleeping apps by calling a route instead of keeping an
@@ -938,6 +951,7 @@ app.post('/api/cron/morning', async (req, res) => {
     return res.status(403).json({ error: 'Scheduled-job requests only.' });
   }
   try {
+    await db.init();
     const result = await catchUpMorningSchedule(console);
     return res.json({ ok: true, job: 'morning-schedule', ...result });
   } catch (err) {
@@ -976,31 +990,33 @@ process.on('uncaughtException', (err) => {
 
 // ---- boot ----
 if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`[server] ClassQU (multi-user) running at ${BASE_URL}`);
+    console.log(`[server] (listening on 0.0.0.0:${PORT}${IS_PROD ? ', production mode' : ', development mode'})`);
+    console.log('[server] APIs: /api/attendance | /api/today | /api/trigger-telegram | /health');
+    console.log('[server] Startup: HTTP listener ready; initializing database and workers in background.');
+  });
+
   (async () => {
     try {
+      bootStatus.database = process.env.DATABASE_URL ? 'connecting' : 'json';
       await db.init();
+      bootStatus.database = 'ready';
       startScheduler();
       startWatcher();
       telegram.initTelegram();
       // 8:30 IST par server band tha / late start hua -> aaj ka timetable ek baar
       // catch-up bhej do (per-day marker same-day duplicate rokta hai).
       catchUpMorningSchedule().catch((e) => console.error('[server] morning catch-up failed:', e.message));
-
-      app.listen(PORT,() => {
-    console.log(`[server] ClassQU (multi-user) running at ${BASE_URL}`);
-    console.log(`[server] (listening on 0.0.0.0:${PORT}${IS_PROD ? ', production mode' : ', development mode'})`);
-    console.log('[server] Pages: / (home) /features /how-it-works /about /faq /contact /privacy /terms | /register /login /dashboard /qums-setup /telegram-setup /forgot /reset');
-    console.log('[server] APIs: /api/attendance | /api/today | /api/trigger-telegram | /health');
-    console.log('[server] Scheduler: 8:30 AM IST (today\'s classes) — saare users, missed-run recovery + boot catch-up (daily 9 PM summary removed)');
-    console.log('[server] Watcher: per-class alerts, college hours 08:30-17:00 IST + backdated month-register loop');
-    console.log('[server] Assignments: new-assignment check (30 min) + deadline reminder 7:00 PM IST');
-    if (!telegram.isConfigured()) {
-      console.log('[server] Telegram: DISABLED — TELEGRAM_BOT_TOKEN set karo (Render env ya .env) aur restart; bina iske server theek chalega.');
-    }
-      });
+      bootStatus.ready = true;
+      console.log('[server] Database and background workers are ready.');
+      if (!telegram.isConfigured()) {
+        console.log('[server] Telegram: DISABLED — TELEGRAM_BOT_TOKEN set karo (Render env ya .env) aur restart; bina iske server theek chalega.');
+      }
     } catch (err) {
+      bootStatus.database = 'error';
+      bootStatus.error = err.message;
       console.error('[server] database boot failed:', err);
-      process.exit(1);
     }
   })();
 }
