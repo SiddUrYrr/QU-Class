@@ -1,11 +1,17 @@
-# ClassQU
+
+
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node.js 18+](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Required-blue.svg)](https://www.postgresql.org/)
+[![Telegram](https://img.shields.io/badge/Telegram-Bot-2CA5E0.svg)](https://core.telegram.org/bots)
+[![Resend](https://img.shields.io/badge/Resend-Email-FF6600.svg)](https://resend.com/)
+[![PowerShell](https://img.shields.io/badge/PowerShell-Required-5391FE.svg)](https://docs.microsoft.com/powershell/)
+[![Neubrutalist](https://img.shields.io/badge/Style-Neubrutalist-1A1A1A.svg)](https://neubrutalist.com/)
 
 **Smart University Attendance Monitor for Quantum University QUMS**
 
-ClassQU connects a student's own QUMS account to a web dashboard and an
-optional Telegram bot. It shows attendance and timetable data, calculates the
-classes needed to reach 75%, tracks assignments, and alerts the student when
-attendance is marked.
+ClassQU connects a student's own QUMS account to a web dashboard and an optional Telegram bot. It shows attendance and timetable data, calculates the classes needed to reach 75%, tracks assignments, and alerts the student when attendance is marked.
 
 
 ## What ClassQU does
@@ -15,7 +21,7 @@ attendance is marked.
 - One-time password-reset links with one-hour expiry.
 - QUMS attendance, timetable, assignment, and session-status monitoring.
 - Exact attendance counts when QUMS provides them, with a safe estimate fallback.
-- Dashboard guidance in **Hinglish** or **English**.
+- Dashboard guidance in **English**.
 - Telegram deep-link connection for each user.
 - Per-class Telegram alerts when a teacher marks attendance as present or absent.
 - Backdated attendance alerts from the QUMS month register.
@@ -25,15 +31,12 @@ attendance is marked.
 - PostgreSQL persistence for deployments and a JSON store for local development.
 - Neubrutalist ClassQU dashboard styling.
 
-## Requirements
 
-- Node.js 18 or newer.
-- Playwright's Chromium browser dependencies.
-- PostgreSQL for production or another persistent deployment.
-- A Telegram bot token for Telegram features.
-- A Resend API key for production password-reset email delivery.
 
-## Local setup on Windows PowerShell
+
+
+
+
 
 ```powershell
 git clone https://github.com/SiddUrYrr/QU-Class.git

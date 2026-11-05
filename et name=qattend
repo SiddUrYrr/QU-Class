@@ -1,0 +1,53 @@
+[1mdiff --git a/package-lock.json b/package-lock.json[m
+[1mindex 9fda85f..a4fec4b 100644[m
+[1m--- a/package-lock.json[m
+[1m+++ b/package-lock.json[m
+[36m@@ -1,11 +1,11 @@[m
+ {[m
+[31m-  "name": "qums-attendance-bot",[m
+[32m+[m[32m  "name": "qattend",[m
+   "version": "1.0.0",[m
+   "lockfileVersion": 3,[m
+   "requires": true,[m
+   "packages": {[m
+     "": {[m
+[31m-      "name": "qums-attendance-bot",[m
+[32m+[m[32m      "name": "qattend",[m
+       "version": "1.0.0",[m
+       "license": "MIT",[m
+       "dependencies": {[m
+[36m@@ -15,7 +15,6 @@[m
+         "express-session": "^1.18.0",[m
+         "node-cron": "^3.0.3",[m
+         "node-telegram-bot-api": "^0.66.0",[m
+[31m-        "nodemailer": "^6.9.13",[m
+         "pg": "^8.23.0",[m
+         "playwright": "^1.45.0",[m
+         "resend": "^6.28.1",[m
+[36m@@ -1923,15 +1922,6 @@[m
+       "integrity": "sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==",[m
+       "license": "MIT"[m
+     },[m
+[31m-    "node_modules/nodemailer": {[m
+[31m-      "version": "6.10.1",[m
+[31m-      "resolved": "https://registry.npmjs.org/nodemailer/-/nodemailer-6.10.1.tgz",[m
+[31m-      "integrity": "sha512-Z+iLaBGVaSjbIzQ4pX6XV41HrooLsQ10ZWPUehGmuantvzWoDVBnmsdUcOIDM1t+yPor5pDhVlDESgOMEGxhHA==",[m
+[31m-      "license": "MIT-0",[m
+[31m-      "engines": {[m
+[31m-        "node": ">=6.0.0"[m
+[31m-      }[m
+[31m-    },[m
+     "node_modules/oauth-sign": {[m
+       "version": "0.9.0",[m
+       "resolved": "https://registry.npmjs.org/oauth-sign/-/oauth-sign-0.9.0.tgz",[m
+[1mdiff --git a/package.json b/package.json[m
+[1mindex c4e7bbe..6e1cf7b 100644[m
+[1m--- a/package.json[m
+[1m+++ b/package.json[m
+[36m@@ -1,5 +1,5 @@[m
+ {[m
+[31m-  "name": "qums-attendance-bot",[m
+[32m+[m[32m  "name": "qattend",[m
+   "version": "1.0.0",[m
+   "description": "QUMS portal attendance scraper + 75% calculator + web dashboard + daily Telegram summary (9 PM IST)",[m
+   "main": "src/server.js",[m
