@@ -7,7 +7,6 @@ optional Telegram bot. It shows attendance and timetable data, calculates the
 classes needed to reach 75%, tracks assignments, and alerts the student when
 attendance is marked.
 
-## inspire by https://github.com/karansin003/qattend
 
 ## What ClassQU does
 
@@ -266,3 +265,5 @@ test/
 
 ClassQU is an independent utility and is not an official Quantum University
 service.
+
+** Inspire by https://github.com/karansin003/qattend **
