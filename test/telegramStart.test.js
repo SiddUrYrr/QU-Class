@@ -90,9 +90,9 @@ function deliver(chatId, text, messageId) {
   matched[0].callback({ chat: { id: chatId }, message_id: messageId, text }, text.match(matched[0].regexp));
 }
 
-// ---- child process mode: "doosra instance" simulate karo (lock parent ke paas) ----
+// ---- child process mode: "second instance" simulate (with lock on parent) ----
 if (process.argv[2] === '--second-instance') {
-  const print = (m) => console.log(String(m)); // log + error dono stdout -> parent capture kar sake
+  const print = (m) => console.log(String(m)); // log + error both go to stdout -> parent can capture
   telegram.initTelegram({ log: print, error: print });
   console.log(`CHILD_OK polling_env=${process.env.TELEGRAM_POLLING || 'on'} handlers=${handlers.length}`);
   process.exit(0);

@@ -40,8 +40,8 @@ const { sendMessage } = require('./telegram');
 const { formatMorningSchedule } = require('./messages');
 const { maybeNotifySessionExpired } = require('./alerts');
 
-// 8:30 AM every day (pehli class 9:00 se pehle dekhne ka time).
-// MORNING_CRON env se override ho sakta hai (invalid ho to default + warning).
+// 8:30 AM every day (the first class at 9:00 AM is earlier).
+// MORNING_CRON env can override it (defaults to + warning if invalid).
 const MORNING_CRON_DEFAULT = '30 8 * * *';
 const MORNING_CRON_ENV = String(process.env.MORNING_CRON || '').trim();
 const MORNING_CRON = MORNING_CRON_ENV && cron.validate(MORNING_CRON_ENV) ? MORNING_CRON_ENV : MORNING_CRON_DEFAULT;

@@ -36,7 +36,7 @@ function check(label, actual, expected) {
 
 /** Extract a top-level `function name() {...}` from the source (closing brace at column 0).
  * NOTE: scraper.js ke andar PURANA single-user scraper line-commented pada hai —
- * isliye `//`-prefixed matches SKIP karo aur sirf ACTIVE (uncommented) copy uthao. */
+ * therefore `//`-prefixed matches SKIP karo aur sirf ACTIVE (uncommented) copy uthao. */
 function extractFunction(src, name) {
   const sig = `function ${name}() {`;
   let start = -1;

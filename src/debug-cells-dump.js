@@ -48,7 +48,7 @@ const OUT_FILE = path.join(__dirname, '..', 'debug-cells-dump.txt');
   await page.waitForTimeout(2000);
 
   const pw = await page.locator('input[type="password"]').count();
-  if (pw > 0 || isLoginLike(page.url())) throw new Error('Session expired — pehle /qums-setup se re-login karo, phir ye script chalao.');
+  if (pw > 0 || isLoginLike(page.url())) throw new Error('Session expired — re-login at /qums-setup first, then run this script.');
 
   const dump = await page.evaluate(() => {
     const norm = (s) => (s || '').replace(/\s+/g, ' ').trim();

@@ -28,7 +28,7 @@ const sessionPath = process.argv[2] || path.join(__dirname, '..', 'session_state
     console.log('status:', resp.status(), '| password input:', hasPassword, '| RegID:', hasRegId);
     console.log(
       'VERDICT:',
-      hasRegId ? 'SESSION ZINDA HAI ✓' : hasPassword ? 'SESSION EXPIRE — /qums-setup dobara karo' : 'UNKNOWN page shape'
+      hasRegId ? 'SESSION IS ALIVE ✓' : hasPassword ? 'SESSION EXPIRED — re-run /qums-setup' : 'UNKNOWN page shape'
     );
   }
   await ctx.dispose();

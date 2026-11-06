@@ -39,13 +39,13 @@ const PUBLIC_DIR = path.join(__dirname, '..', 'public');
 const SESSION_DIR = path.join(__dirname, '..', 'data', 'app-sessions');
 const SESSION_SECRET = process.env.SESSION_SECRET || 'dev-only-insecure-secret-change-me';
 const DUMMY_PASSWORD_HASH = bcrypt.hashSync('invalid-login-password', 10);
-// Render automatically RENDER=true set karta hai — NODE_ENV bhool jao to bhi
-// secure-cookie/prod behavior theek rahega.
+// Render automatically RENDER=true sets it — forget NODE_ENV even then
+// secure-cookie/prod behavior will remain correct.
 const IS_PROD = process.env.NODE_ENV === 'production' || Boolean(process.env.RENDER);
 
 if (IS_PROD && !process.env.SESSION_SECRET) {
   console.error('[server] ⚠️ SESSION_SECRET missing in production — insecure dev fallback in use!');
-  console.error('[server] ⚠️ Render Dashboard → Environment → SESSION_SECRET set karo (phir restart).');
+  console.error('[server] ⚠️ Render Dashboard → Environment → Set SESSION_SECRET (then restart).');
 }
 
 /**
@@ -930,7 +930,7 @@ app.post('/api/admin/users/bulk-reconnect-notify', requireAdmin, async (req, res
 
 // ---- misc ----
 // Health check — simple, secret-free: user counts / telegram state / internals
-// PUBLIC endpoint pe leak nahi karte. Render Health Check Path isi ko point karo.
+// PUBLIC endpoint no data leak. Render Health Check path points to this.
 app.get('/health', (req, res) => {
   res.json({
     ok: true,

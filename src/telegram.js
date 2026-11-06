@@ -1162,7 +1162,7 @@ function pidAlive(pid) {
 function acquirePollingLock(log) {
   const existing = readLockFile();
   if (existing && pidAlive(existing.pid)) {
-    log.error(`[telegram] ⚠️ polling SKIPPED — pid ${existing.pid} (since ${existing.startedAt}) already polls @${BOT_USERNAME} on this machine. Do pollers = duplicate /start replies. Us process ko kill karo ya wahan TELEGRAM_POLLING=off set karo.`);
+    log.error(`[telegram] ⚠️ polling SKIPPED — pid ${existing.pid} (since ${existing.startedAt}) already polls @${BOT_USERNAME} on this machine. Duplicate /start replies will occur. Kill this process or set TELEGRAM_POLLING=off there.`);
     return false;
   }
   try {
@@ -1920,7 +1920,7 @@ function initTelegram(log = console) {
   bot.on('polling_error', (err) => {
     const msg = String((err && err.message) || '');
     if (/409|conflict/i.test(msg)) {
-      log.error(`[telegram] polling CONFLICT — koi dusra instance (@${BOT_USERNAME}) usi bot token se getUpdates kar raha hai, isliye ek /start ka jawab DO baar jaa sakta hai. Sirf EK poller chalao (dusre pe TELEGRAM_POLLING=off set karo ya usse kill karo). (${msg})`);
+      log.error(`[telegram] polling CONFLICT — another instance (@${BOT_USERNAME}) is using the same bot token to getUpdates, so a /start reply can be sent twice. Run only ONE poller (set TELEGRAM_POLLING=off on others or kill them). (${msg})`);
       return;
     }
     log.error(`[telegram] polling error: ${msg}`);

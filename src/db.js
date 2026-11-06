@@ -34,11 +34,11 @@
 // }
 
 // // Machine-portable QUMS sessions: db.json me store kiya gaya qumsSessionPath
-// // PURANE machine ka absolute path ho sakta hai (e.g. Mac -> Windows/Render
-// // migrate karte waqt). Session file HAMESHA canonical path pe hoti hai
-// // (qums-login-web.js isi pe save karta hai), isliye load pe normalize karo.
-// // Isse multi-user deploy machine-agnostic ban jata hai — koi user-specific
-// // path db me "sach" nahi hota.
+// // Absolute path of an OLD machine could be (e.g. Mac -> Windows/Render
+// // during migration). Session file ALWAYS stays on canonical path
+// // (qums-login-web.js saves it here), so load and normalize on load.
+// // This makes multi-user deployment machine-agnostic — no user-specific
+// // "sach" (truth) doesn't exist in the db path.
 // let sessionPathsFixed = false;
 // for (const u of data.users) {
 //   if (u.qumsSessionPath) {

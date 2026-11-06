@@ -33,11 +33,6 @@ ClassQU connects a student's own QUMS account to a web dashboard and an optional
 
 
 
-
-
-
-
-
 ```powershell
 git clone https://github.com/SiddUrYrr/QU-Class.git
 Set-Location .\qattend

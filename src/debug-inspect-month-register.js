@@ -283,7 +283,7 @@ function probeNoRecords() {
     // ---- Step A1: Academic probe ----
     dump('A1: ACADEMIC ELEMENTS (text/alt/title match)', JSON.stringify(await page.evaluate(probeAcademic), null, 2));
 
-    // ---- Step A2: Academic click (candidates try karo) ----
+    // ---- Step A2: Academic click (candidates try) ----
     const academicSelectors = [
       'text=Academic',
       'img[alt*="Academic" i]',
@@ -353,7 +353,7 @@ function probeNoRecords() {
     dump('B1c: PRESENT/ABSENT/DIFF-LECTURE ELEMENTS (filter ya legend?)', JSON.stringify(mr.statusButtons, null, 2));
     dump('B1d: VIEW BUTTONS', JSON.stringify(mr.viewButtons, null, 2));
 
-    // ---- Step B2: month select + View click — months iterate karo ----
+    // ---- Step B2: month select + View click — months iterate ----
     const MONTH_NAMES = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     const nowIst = new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Kolkata', month: 'long' }).format(new Date());
     const candidates = [];

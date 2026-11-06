@@ -85,7 +85,7 @@ async function autofillCredentials(frame, qid, password) {
   await passwordInput.fill(password);
 
   console.log('[+] QID + password auto-filled. Captcha field left empty for you.');
-  console.log('    (Agar QID kisi galat box me gaya ho to window me khud theek kar lena.)');
+  console.log('    (If QID goes in any wrong box, just fix it in the window.)');
 }
 
 /**

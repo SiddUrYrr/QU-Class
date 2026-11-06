@@ -22,13 +22,13 @@ const os = require('os');
 const path = require('path');
 const { execFileSync } = require('child_process');
 
-// Child process (S9) ko SAME tmp dir chahiye — isliye inherited env respect karo.
+// Child process (S9) needs SAME tmp dir — so respect inherited env.
 const TMP_DIR = process.env.SCHED_TEST_TMP || fs.mkdtempSync(path.join(os.tmpdir(), 'qums-sched-'));
 process.env.SCHED_TEST_TMP = TMP_DIR;
 process.env.DB_FILE = process.env.DB_FILE || path.join(TMP_DIR, 'db.json');
 process.env.DATABASE_URL = ''; // JSON store (test isolation)
 process.env.MORNING_STATE_FILE = process.env.MORNING_STATE_FILE || path.join(TMP_DIR, 'morning_state.json');
-delete process.env.MORNING_CRON; // default 8:30 wala path test karo
+delete process.env.MORNING_CRON; // test the default 8:30 AM path
 delete process.env.MORNING_PREWARM_CRON; // default 08:15 pre-warm
 
 // IST helper: 08:30 IST == 03:00 UTC (same date).

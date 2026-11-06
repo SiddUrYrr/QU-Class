@@ -125,7 +125,7 @@ async function gotoLoginPage(page) {
       `QUMS portal tak navigation fail hua (${String(err.message || '').split('\n')[0]}).`
     );
     e.name = 'ScrapeError'; // server maps this to HTTP 502 + shows the hint
-    e.hint = 'Portal down hai ya network se reachable nahi — thodi der baad retry karo.';
+    e.hint = 'Portal is down or not reachable from network — retry after some time.';
     throw e;
   }
 
@@ -148,7 +148,7 @@ async function gotoLoginPage(page) {
 
   const e = new Error('QUMS login form load nahi hua (page khula par form nahi mila).');
   e.name = 'ScrapeError';
-  e.hint = 'Portal slow hai ya markup badal gaya hai — thodi der baad retry karo.';
+  e.hint = 'Portal is slow or markup has changed — retry after some time.';
   throw e;
 }
 
