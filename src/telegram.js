@@ -852,7 +852,7 @@ async function handleUserMessage(msg, log = console) {
       log.log(`[telegram-reconnect] ❌ Invalid credentials rejected by QUMS for user ${user.id}`);
       await clearReconnectState(user.id, log);
       const alerts = require('./alerts');
-      const recUrl = typeof alerts.reconnectUrl === 'function' ? alerts.reconnectUrl() : 'https://qattend.onrender.com/qums-setup?reconnect=1';
+      const recUrl = typeof alerts.reconnectUrl === 'function' ? alerts.reconnectUrl() : 'https://qu-class.onrender.com/qums-setup?reconnect=1';
       const msgText = [
         '❌ *Invalid QID or Password*',
         '',

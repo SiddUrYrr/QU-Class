@@ -15,10 +15,10 @@ console.log('=== RUNNING PUBLIC GUIDES VALIDATION SUITE ===\n');
 
 // 2. Guide HTML files existence and structure
 const guides = [
-  { file: 'attendance-calculator-guide.html', canonical: 'https://qattend.onrender.com/attendance-calculator-guide' },
-  { file: 'qums-troubleshooting.html', canonical: 'https://qattend.onrender.com/qums-troubleshooting' },
-  { file: 'telegram-guide.html', canonical: 'https://qattend.onrender.com/telegram-guide' },
-  { file: 'security-and-privacy.html', canonical: 'https://qattend.onrender.com/security-and-privacy' },
+  { file: 'attendance-calculator-guide.html', canonical: 'https://qu-class.onrender.com/attendance-calculator-guide' },
+  { file: 'qums-troubleshooting.html', canonical: 'https://qu-class.onrender.com/qums-troubleshooting' },
+  { file: 'telegram-guide.html', canonical: 'https://qu-class.onrender.com/telegram-guide' },
+  { file: 'security-and-privacy.html', canonical: 'https://qu-class.onrender.com/security-and-privacy' },
 ];
 
 for (const g of guides) {
@@ -59,7 +59,7 @@ for (const g of guides) {
 
 const robots = read(path.join(PUBLIC, 'robots.txt'));
 ok('G4 robots.txt remains available', robots.includes('User-agent: *'));
-ok('G4 robots.txt links sitemap', robots.includes('Sitemap: https://qattend.onrender.com/sitemap.xml'));
+ok('G4 robots.txt links sitemap', robots.includes('Sitemap: https://qu-class.onrender.com/sitemap.xml'));
 ok('G4 robots.txt keeps private routes disallowed', robots.includes('Disallow: /dashboard') && robots.includes('Disallow: /api/'));
 
 // 5. Calculator mathematical logic verification
