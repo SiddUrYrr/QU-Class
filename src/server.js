@@ -75,6 +75,22 @@ fs.mkdirSync(SESSION_DIR, { recursive: true }); // Render/first-run pe dir missi
 
 app.disable('x-powered-by');
 app.set('trust proxy', 1); // Render ke reverse proxy ke peeche req.protocol/secure sahi rahe
+
+// ---- URL normalization: strip trailing whitespace (incl. %20) from path ----
+// Prevents "Cannot GET /qums-setup%20" 404s when a link has a trailing space
+// before the query string (e.g. /qums-setup%20?reconnect=1).
+app.use((req, res, next) => {
+  const url = req.url;
+  const qIdx = url.indexOf('?');
+  const pathPart = qIdx === -1 ? url : url.slice(0, qIdx);
+  const queryPart = qIdx === -1 ? '' : url.slice(qIdx);
+  const normalizedPath = pathPart.replace(/%20\s*$/i, '').replace(/\s+$/, '');
+  if (normalizedPath !== pathPart) {
+    req.url = normalizedPath + queryPart;
+  }
+  next();
+});
+
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(
