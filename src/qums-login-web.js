@@ -17,7 +17,7 @@
  */
 require('dotenv').config();
 const fs = require('fs');
-const { chromium } = require('playwright');
+const { launchChromium } = require('./browser');
 const db = require('./db');
 const { encryptSecret, decryptSecret } = require('./crypto');
 const {
@@ -153,7 +153,7 @@ async function gotoLoginPage(page) {
 }
 
 async function openLoginFormPage() {
-  const browser = await chromium.launch({
+  const browser = await launchChromium({
     headless: true,
     args: [
       '--no-sandbox',

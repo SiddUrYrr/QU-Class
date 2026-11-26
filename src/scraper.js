@@ -3,7 +3,8 @@ require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
 const db = require('./db');
-const { request: playwrightRequest, chromium } = require('playwright');
+const { request: playwrightRequest } = require('playwright');
+const { launchChromium } = require('./browser');
 
 const SESSION_FILE = path.join(__dirname, '..', 'session_state.json');
 const DASHBOARD_URL =
@@ -1047,7 +1048,7 @@ function getTodaySubjects(timetable, now = new Date()) {
 
 
 async function createSessionContext(sessionPath = SESSION_FILE) {
-  const browser = await chromium.launch({ headless: true });
+  const browser = await launchChromium({ headless: true });
   const context = await browser.newContext({
     storageState: sessionPath,
     viewport: { width: 1366, height: 900 },
