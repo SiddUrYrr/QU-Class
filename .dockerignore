@@ -6,6 +6,8 @@ node_modules
 !.env.example
 data/*
 !data/.gitkeep
+# NOTE: src/ must NOT be ignored here — package.json's postinstall runs
+# src/install-browser.js. Excluding it makes AntiDeploy fail the build with
+# "'/workspace/src/install-browser.js' couldn't be found at build time".
 test
-scripts
 *.log

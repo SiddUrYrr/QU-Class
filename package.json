@@ -5,7 +5,7 @@
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
-    "postinstall": "node scripts/install-browser.js",
+    "postinstall": "node src/install-browser.js",
     "scrape": "node src/scraper.js",
     "test": "node test/nativeAuth.test.js && node test/parser.test.js && node test/multiuser.test.js && node test/telegramStart.test.js && node test/scheduler.test.js && node test/backdated.test.js && node test/assignments.test.js && node test/reconnect.test.js && node test/telegramCaptchaReconnect.test.js && node test/ui.test.js && node test/admin.test.js && node test/architecture.test.js && node test/telegramAutoDeleteCommands.test.js && node test/sessionExpiryFk23503Regression.test.js && node test/sessionExpiryFlowInvestigation.test.js && node test/sessionPersistenceRestart.test.js && node test/sessionStatusDashboardAdminParity.test.js && node test/sessionExpiryAlertRetention.test.js && node test/watcherSelfHealingRecovery.test.js && node test/timetableAndReconnectDedupe.test.js && node test/dateAttendanceLookup.test.js && node test/publicGuides.test.js",
     "telegram-test": "node src/telegram.js",
