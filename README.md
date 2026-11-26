@@ -79,6 +79,13 @@ Copy all available options from [.env.example](./.env.example). Never commit
 `.env`, QUMS credentials, Telegram bot tokens, database URLs, Resend keys, or
 encryption keys.
 
+### Antideploy
+
+The root `Dockerfile` installs Chromium and its Linux system dependencies for
+the QUMS browser flow used when reconnecting from Telegram. Antideploy must use
+this Dockerfile rather than its automatic buildpack; confirm the deploy log
+shows it built the Dockerfile.
+
 ### PostgreSQL notes
 
 - Use the complete connection string from your PostgreSQL provider.
