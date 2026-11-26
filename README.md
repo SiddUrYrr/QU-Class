@@ -86,6 +86,10 @@ the QUMS browser flow used when reconnecting from Telegram. Antideploy must use
 this Dockerfile rather than its automatic buildpack; confirm the deploy log
 shows it built the Dockerfile.
 
+The Render blueprint also uses the Dockerfile so Chromium's system libraries
+are present at runtime. If configuring the service manually, select the Docker
+runtime and set the Dockerfile path to `./Dockerfile`.
+
 ### PostgreSQL notes
 
 - Use the complete connection string from your PostgreSQL provider.

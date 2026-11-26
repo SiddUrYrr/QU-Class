@@ -1,8 +1,7 @@
 services:
   - type: web
     name: qu-class
-    runtime: node
+    runtime: docker
     plan: free
-    buildCommand: npm install && npx playwright install --with-deps chromium
-    startCommand: npm start
+    dockerfilePath: ./Dockerfile
     healthCheckPath: /health
