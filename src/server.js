@@ -198,7 +198,25 @@ function httpStatusFor(err) {
   if (err.name === 'NoPendingLogin' || err.name === 'TelegramNotLinked') return 409;
   if (err.name === 'QumsCredsMissing' || err.name === 'QumsCredsRequired') return 400;
   if (err.name === 'ScrapeError') return 502;
+  if (err.name === 'BrowserLaunchError') return 503;
   return 500;
+}
+
+// Never leak raw Playwright/browser dumps to the client (they are huge and
+// useless to users). Map launch failures to a short, actionable message.
+function publicErrorFor(err) {
+  const raw = String((err && err.message) || '');
+  if (
+    (err && err.name === 'BrowserLaunchError') ||
+    /browserType\.launch|Browser logs|cannot open shared object file|error while loading shared libraries/i.test(raw)
+  ) {
+    return {
+      error: 'Server browser failed to start. Please try again in a minute.',
+      hint: 'If this keeps happening, the server needs its browser libraries installed (deploy via the Dockerfile).',
+      code: 'BROWSER_UNAVAILABLE',
+    };
+  }
+  return { error: err.message, hint: err.hint || null, code: err.name };
 }
 
 // ---- minimal in-memory rate limiter (auth endpoints — brute-force/email-spam guard) ----
